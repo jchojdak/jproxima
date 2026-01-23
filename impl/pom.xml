@@ -16,4 +16,11 @@
     <name>JProxima - Implementation</name>
     <description>Implementation module</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.jchojdak</groupId>
+            <artifactId>jproxima-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>
