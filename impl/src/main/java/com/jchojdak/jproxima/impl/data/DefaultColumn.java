@@ -13,7 +13,7 @@ class DefaultColumn implements Column {
 
     DefaultColumn(String name, Object[] data, DataType type) {
         this.name = name;
-        this.data = data;
+        this.data = Arrays.copyOf(data, data.length);
         this.type = type;
     }
 
