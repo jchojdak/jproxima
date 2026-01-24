@@ -11,7 +11,7 @@ class DefaultDataFrame implements DataFrame {
     private final Map<String, Column> columns;
 
     DefaultDataFrame(Map<String, Column> columns) {
-        this.columns = columns;
+        this.columns = Map.copyOf(columns);
     }
 
     @Override
