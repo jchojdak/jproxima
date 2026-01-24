@@ -5,6 +5,11 @@ import com.jchojdak.jproxima.data.DataType;
 
 import java.util.Arrays;
 
+/**
+ * Default implementation of {@link Column}
+ *
+ * @see Column
+ */
 class DefaultColumn implements Column {
 
     private final String name;

@@ -8,6 +8,11 @@ import com.jchojdak.jproxima.data.DataType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Default implementation of {@link DataFrameBuilder}
+ *
+ * @see DataFrameBuilder
+ */
 public class DefaultDataFrameBuilder implements DataFrameBuilder {
 
     private final Map<String, Column> columns;

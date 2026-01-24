@@ -6,6 +6,11 @@ import com.jchojdak.jproxima.data.DataFrame;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Default implementation of {@link DataFrame}
+ *
+ * @see DataFrame
+ */
 class DefaultDataFrame implements DataFrame {
 
     private final Map<String, Column> columns;
