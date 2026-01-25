@@ -22,10 +22,19 @@ public class DefaultDataFrameBuilder implements DataFrameBuilder {
     }
 
     @Override
-    public DataFrameBuilder addColumn(String name, Object[] data, DataType type) {
-        Column column = new DefaultColumn(name, data, type);
-        columns.put(name, column);
+    public DataFrameBuilder addColumn(String name, Object[] data) {
+        DataType type = DataType.from(data);
+        return addColumn(new DefaultColumn(name, data, type));
+    }
 
+    @Override
+    public DataFrameBuilder addColumn(String name, Object[] data, DataType type) {
+        return addColumn(new DefaultColumn(name, data, type));
+    }
+
+    @Override
+    public DataFrameBuilder addColumn(Column column) {
+        columns.put(column.getName(), column);
         return this;
     }
 

@@ -16,10 +16,34 @@ public interface DataFrameBuilder {
      *
      * @param name the name of the column
      * @param data the data for the column
+     * @return {@code this} builder instance for method chaining
+     */
+    DataFrameBuilder addColumn(String name, Object[] data);
+
+    /**
+     * Adds a column to the DataFrame being built.
+     * <p>
+     * All columns must have the same number of elements (rows).
+     *
+     * @param name the name of the column
+     * @param data the data for the column
      * @param type the type of the column
      * @return {@code this} builder instance for method chaining
      */
     DataFrameBuilder addColumn(String name, Object[] data, DataType type);
+
+    /**
+     * Adds a column to the DataFrame being built.
+     * <p>
+     * All columns must have the same number of elements (rows).
+     *
+     * @param column {@link Column} instance
+     * @return {@code this} builder instance for method chaining
+     *
+     * @see Column
+     * @see ColumnBuilder
+     */
+    DataFrameBuilder addColumn(Column column);
 
     /**
      * Builds and returns the final immutable {@link DataFrame}
