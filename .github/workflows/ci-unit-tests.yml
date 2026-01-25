@@ -28,36 +28,19 @@ jobs:
           java-version: 21
           cache: maven
 
-  test-api:
+  test:
     needs: setup-java
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Use JDK 21 from setup
+      - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 21
+          cache: maven
 
-      - name: Run API tests
-        working-directory: api
-        run: mvn clean test
-
-  test-impl:
-    needs: setup-java
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Use JDK 21 from setup
-        uses: actions/setup-java@v3
-        with:
-          distribution: temurin
-          java-version: 21
-
-      - name: Run Impl tests
-        working-directory: impl
+      - name: Build and test all modules
         run: mvn clean test
