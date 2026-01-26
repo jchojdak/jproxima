@@ -5,6 +5,7 @@ import com.jchojdak.jproxima.data.DataFrame;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Default implementation of {@link DataFrame}
@@ -12,6 +13,8 @@ import java.util.Map;
  * @see DataFrame
  */
 class DefaultDataFrame implements DataFrame {
+
+    private static final int DEFAULT_DISPLAY_LIMIT = 10;
 
     private final Map<String, Column> columns;
 
@@ -145,5 +148,65 @@ class DefaultDataFrame implements DataFrame {
         }
 
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return toString(DEFAULT_DISPLAY_LIMIT);
+    }
+
+    @Override
+    public String toString(int displayLimit) {
+        if (columns.isEmpty()) {
+            return "<Empty DataFrame>";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        int totalRows = rowCount();
+        int rowsToShow = Math.min(displayLimit, totalRows);
+
+        String[] columnNames = columns.keySet().toArray(new String[0]);
+        int[] columnWidths = calculateColumnWidths(columnNames, rowsToShow);
+
+        appendRow(sb, columnNames, columnWidths);
+        sb.append("\n");
+
+        for (int row = 0; row < rowsToShow; row++) {
+            String[] rowData = new String[columnNames.length];
+            for (int col = 0; col < columnNames.length; col++) {
+                rowData[col] = String.valueOf(columns.get(columnNames[col]).get(row));
+            }
+            appendRow(sb, rowData, columnWidths);
+            if (row < rowsToShow - 1 || totalRows > displayLimit) {
+                sb.append("\n");
+            }
+        }
+
+        if (totalRows > displayLimit) {
+            sb.append("... (").append(totalRows - displayLimit).append(" more rows)");
+        }
+
+        return sb.toString();
+    }
+
+    private int[] calculateColumnWidths(String[] columnNames, int rowsToShow) {
+        int[] widths = new int[columnNames.length];
+        for (int i = 0; i < columnNames.length; i++) {
+            widths[i] = columnNames[i].length();
+            Column column = columns.get(columnNames[i]);
+            for (int row = 0; row < rowsToShow; row++) {
+                widths[i] = Math.max(widths[i], String.valueOf(column.get(row)).length());
+            }
+        }
+        return widths;
+    }
+
+    private void appendRow(StringBuilder sb, String[] values, int[] widths) {
+        for (int i = 0; i < values.length; i++) {
+            sb.append(String.format("%-" + widths[i] + "s", values[i]));
+            if (i < values.length - 1) {
+                sb.append("  ");
+            }
+        }
     }
 }
