@@ -41,6 +41,14 @@ public interface DataFrame {
     /**
      * Returns a new DataFrame with an added column.
      *
+     * @param column column to add
+     * @return new DataFrame with added column
+     */
+    DataFrame addColumn(Column column);
+
+    /**
+     * Returns a new DataFrame with an added column.
+     *
      * @param name column name
      * @param column column to add
      * @return new DataFrame with added column

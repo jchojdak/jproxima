@@ -49,6 +49,15 @@ class DefaultDataFrame implements DataFrame {
     }
 
     @Override
+    public DataFrame addColumn(Column column) {
+        Map<String, Column> updatedColumns = new LinkedHashMap<>(columns);
+
+        updatedColumns.put(column.getName(), column);
+
+        return new DefaultDataFrame(updatedColumns);
+    }
+
+    @Override
     public DataFrame addColumn(String name, Column column) {
         Map<String, Column> updatedColumns = new LinkedHashMap<>(columns);
 
