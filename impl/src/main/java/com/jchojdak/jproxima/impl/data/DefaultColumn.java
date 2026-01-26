@@ -55,8 +55,10 @@ class DefaultColumn implements Column {
         return toString(DEFAULT_DISPLAY_LIMIT);
     }
 
+    @Override
     public String toString(int displayLimit) {
-        int endLimit = Math.min(displayLimit, size());
+        int totalRows = size();
+        int endLimit = Math.min(displayLimit, totalRows);
 
         StringBuilder sb = new StringBuilder();
         sb.append(name).append(" [").append(type).append("]: ");
@@ -66,7 +68,7 @@ class DefaultColumn implements Column {
                 .collect(Collectors.joining(", "));
         sb.append(content);
 
-        if (size() > displayLimit)
+        if (totalRows > displayLimit)
             sb.append(", ...");
 
         return sb.toString();
