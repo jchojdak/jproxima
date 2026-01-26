@@ -53,20 +53,41 @@ class DefaultDataFrameTest {
     }
 
     @Test
-    void shouldAddNewColumn() {
+    void shouldAddNewColumnWithoutName() {
         DataFrame df = DataFrameBuilder.create()
                 .addColumn("col1", new Object[]{1, 2})
                 .build();
+
         Column newColumn = ColumnBuilder.create()
                 .name("col2")
                 .type(DataType.STRING)
                 .addAll(new Object[]{"a", "b"})
                 .build();
 
-        DataFrame result = df.addColumn("col2", newColumn);
+        DataFrame result = df.addColumn(newColumn);
 
         assertEquals(2, result.columnCount());
         assertEquals(newColumn, result.getColumn("col2"));
+    }
+
+    @Test
+    void shouldAddNewColumnWithName() {
+        String name = "col2";
+
+        DataFrame df = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2})
+                .build();
+
+        Column newColumn = ColumnBuilder.create()
+                .name(name)
+                .type(DataType.STRING)
+                .addAll(new Object[]{"a", "b"})
+                .build();
+
+        DataFrame result = df.addColumn(name, newColumn);
+
+        assertEquals(2, result.columnCount());
+        assertEquals(newColumn, result.getColumn(name));
     }
 
     @Test
