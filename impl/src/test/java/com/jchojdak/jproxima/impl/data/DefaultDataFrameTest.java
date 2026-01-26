@@ -188,4 +188,51 @@ class DefaultDataFrameTest {
 
         assertEquals(0, result.length);
     }
+
+    @Test
+    void shouldReturnStringForNonEmptyDataFrame() {
+        DataFrame df = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2, 3})
+                .addColumn("col2", new Object[]{"a", "b", "c"})
+                .build();
+
+        String result = df.toString();
+
+        assertTrue(result.contains("col1"));
+        assertTrue(result.contains("col2"));
+
+        assertTrue(result.contains("1"));
+        assertTrue(result.contains("2"));
+        assertTrue(result.contains("3"));
+        assertTrue(result.contains("a"));
+        assertTrue(result.contains("b"));
+        assertTrue(result.contains("c"));
+    }
+
+    @Test
+    void shouldRespectDisplayLimitInToString() {
+        DataFrame df = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2, 3, 4, 5})
+                .build();
+
+        String result = df.toString(3);
+
+        assertTrue(result.contains("1"));
+        assertTrue(result.contains("2"));
+        assertTrue(result.contains("3"));
+
+        assertFalse(result.contains("4"));
+        assertFalse(result.contains("5"));
+
+        assertTrue(result.contains("... (2 more rows)"));
+    }
+
+    @Test
+    void shouldReturnEmptyDataFrameStringForEmptyDataFrame() {
+        DataFrame df = DataFrameBuilder.create().build();
+
+        String result = df.toString();
+
+        assertEquals("<Empty DataFrame>", result);
+    }
 }
