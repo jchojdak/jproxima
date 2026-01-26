@@ -5,7 +5,6 @@ import com.jchojdak.jproxima.data.DataFrame;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Default implementation of {@link DataFrame}
