@@ -46,4 +46,12 @@ public interface Column {
      * @return column name
      */
     String getName();
+
+    /**
+     * Returns a string representation of the column, with up to {@code displayLimit} values shown.
+     *
+     * @param displayLimit max number of elements to show
+     * @return string representation of the column
+     */
+    String toString(int displayLimit);
 }
