@@ -41,7 +41,15 @@ public interface DataFrame {
     /**
      * Returns a new DataFrame with an added column.
      *
-     * @param name column name
+     * @param column column to add
+     * @return new DataFrame with added column
+     */
+    DataFrame addColumn(Column column);
+
+    /**
+     * Returns a new DataFrame with an added column.
+     *
+     * @param name   column name
      * @param column column to add
      * @return new DataFrame with added column
      */
@@ -77,4 +85,12 @@ public interface DataFrame {
      * @return 2D array of all data
      */
     Object[][] toArray();
+
+    /**
+     * Returns a string representation of the DataFrame, with up to {@code displayLimit} rows shown.
+     *
+     * @param displayLimit max number of rows to show
+     * @return string representation of the DataFrame
+     */
+    String toString(int displayLimit);
 }

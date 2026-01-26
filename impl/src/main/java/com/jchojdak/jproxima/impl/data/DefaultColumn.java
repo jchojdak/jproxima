@@ -4,6 +4,7 @@ import com.jchojdak.jproxima.data.Column;
 import com.jchojdak.jproxima.data.DataType;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Default implementation of {@link Column}
@@ -11,6 +12,8 @@ import java.util.Arrays;
  * @see Column
  */
 class DefaultColumn implements Column {
+
+    private static final int DEFAULT_DISPLAY_LIMIT = 10;
 
     private final String name;
     private final Object[] data;
@@ -45,5 +48,29 @@ class DefaultColumn implements Column {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String toString() {
+        return toString(DEFAULT_DISPLAY_LIMIT);
+    }
+
+    @Override
+    public String toString(int displayLimit) {
+        int totalRows = size();
+        int endLimit = Math.min(displayLimit, totalRows);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(name).append(" [").append(type).append("]: ");
+
+        String content = Arrays.stream(data, 0, endLimit)
+                .map(String::valueOf)
+                .collect(Collectors.joining(", "));
+        sb.append(content);
+
+        if (totalRows > displayLimit)
+            sb.append(", ...");
+
+        return sb.toString();
     }
 }

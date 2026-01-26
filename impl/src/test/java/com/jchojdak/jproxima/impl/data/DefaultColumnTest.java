@@ -106,4 +106,43 @@ class DefaultColumnTest {
 
         assertEquals("testColumn", column.getName());
     }
+
+    @Test
+    void shouldReturnStringWithDefaultLimit() {
+        Integer[] data = {1, 2, 3, 4, 5};
+        Column column = ColumnBuilder.create()
+                .name("numbers")
+                .type(DataType.INTEGER)
+                .addAll(data)
+                .build();
+
+        String expected = "numbers [INTEGER]: 1, 2, 3, 4, 5";
+        assertEquals(expected, column.toString());
+    }
+
+    @Test
+    void shouldReturnStringWithCustomLimitLessThanSize() {
+        Integer[] data = {1, 2, 3, 4, 5};
+        Column column = ColumnBuilder.create()
+                .name("numbers")
+                .type(DataType.INTEGER)
+                .addAll(data)
+                .build();
+
+        String expected = "numbers [INTEGER]: 1, 2, 3, ...";
+        assertEquals(expected, column.toString(3));
+    }
+
+    @Test
+    void shouldReturnStringWithCustomLimitGreaterThanSize() {
+        Integer[] data = {1, 2, 3};
+        Column column = ColumnBuilder.create()
+                .name("numbers")
+                .type(DataType.INTEGER)
+                .addAll(data)
+                .build();
+
+        String expected = "numbers [INTEGER]: 1, 2, 3";
+        assertEquals(expected, column.toString(10));
+    }
 }
