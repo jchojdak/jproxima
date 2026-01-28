@@ -8,7 +8,7 @@ import com.jchojdak.jproxima.io.spi.DataFrameReaderFactory;
 
 import java.nio.file.Path;
 
-public class DefaultDataFrameReaderFactory implements DataFrameReaderFactory {
+public final class DefaultDataFrameReaderFactory implements DataFrameReaderFactory {
 
     @Override
     public DataFrame readAuto(Path path) {
