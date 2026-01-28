@@ -78,7 +78,7 @@ final class CsvParser {
         }
     }
 
-    private DataFrame buildDataFrame(CSVParser csvParser) throws IOException {
+    private DataFrame buildDataFrame(CSVParser csvParser) {
         List<CSVRecord> records = csvParser.getRecords();
 
         if (records.isEmpty()) {
@@ -101,7 +101,10 @@ final class CsvParser {
 
     private String[] extractHeaderNames(CSVParser csvParser) {
         String[] headers = new String[csvParser.getHeaderMap().size()];
-        csvParser.getHeaderMap().forEach((name, index) -> headers[index] = name);
+
+        csvParser.getHeaderMap()
+                .forEach((name, index) -> headers[index] = name);
+
         return headers;
     }
 

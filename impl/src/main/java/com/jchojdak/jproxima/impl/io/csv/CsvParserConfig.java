@@ -34,6 +34,7 @@ record CsvParserConfig(
         return new Builder();
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     static class Builder {
 
         private char delimiter = DEFAULT_DELIMITER;
