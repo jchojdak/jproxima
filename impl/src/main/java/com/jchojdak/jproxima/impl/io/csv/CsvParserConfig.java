@@ -3,6 +3,19 @@ package com.jchojdak.jproxima.impl.io.csv;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Configuration for CSV parsing.
+ * <p>
+ * This record holds all parameters that control how a CSV file is parsed
+ *
+ * @param delimiter column delimiter character
+ * @param hasHeader whether the first row is a header
+ * @param quote quote character for fields
+ * @param escape escape character for quotes
+ * @param encoding file encoding
+ * @param skipRows number of rows to skip before parsing
+ * @param nullValue string value representing null
+ */
 record CsvParserConfig(
         char delimiter,
         boolean hasHeader,

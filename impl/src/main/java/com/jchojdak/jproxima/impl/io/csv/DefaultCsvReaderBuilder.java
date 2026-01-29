@@ -6,6 +6,11 @@ import com.jchojdak.jproxima.io.read.CsvReaderBuilder;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 
+/**
+ * Default implementation of {@link CsvReaderBuilder}.
+ *
+ * @see CsvReaderBuilder
+ */
 public final class DefaultCsvReaderBuilder implements CsvReaderBuilder {
 
     private final Path path;

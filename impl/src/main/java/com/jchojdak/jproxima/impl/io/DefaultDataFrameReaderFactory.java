@@ -8,6 +8,11 @@ import com.jchojdak.jproxima.io.spi.DataFrameReaderFactory;
 
 import java.nio.file.Path;
 
+/**
+ * Default implementation of {@link DataFrameReaderFactory}.
+ * <p>
+ * File type detection is currently based on file name extensions.
+ */
 public final class DefaultDataFrameReaderFactory implements DataFrameReaderFactory {
 
     @Override
