@@ -6,11 +6,11 @@
 
     <groupId>com.jchojdak</groupId>
     <artifactId>jproxima</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <packaging>pom</packaging>
 
     <name>JProxima</name>
-    <description>Machine Learning for the JVM</description>
+    <description>Machine learning and data manipulation library for the JVM.</description>
     <url>https://github.com/jchojdak/jproxima</url>
 
     <licenses>
@@ -33,12 +33,23 @@
         </developer>
     </developers>
 
+    <scm>
+        <connection>scm:git:https://github.com/jchojdak/jproxima.git</connection>
+        <developerConnection>scm:git:https://github.com/jchojdak/jproxima.git</developerConnection>
+        <url>https://github.com/jchojdak/jproxima</url>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>21</java.version>
-        <junit.version>5.10.1</junit.version>
+
         <surefire.plugin.version>3.5.4</surefire.plugin.version>
         <compiler.plugin.version>3.14.1</compiler.plugin.version>
+        <javadoc.plugin.version>3.12.0</javadoc.plugin.version>
+        <gpg.plugin.version>3.2.8</gpg.plugin.version>
+        <central.publishing.plugin.version>0.10.0</central.publishing.plugin.version>
+
+        <junit.version>5.10.1</junit.version>
         <commons-csv.version>1.14.1</commons-csv.version>
     </properties>
 
@@ -100,4 +111,71 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.4.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${javadoc.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${gpg.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>${central.publishing.plugin.version}</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
