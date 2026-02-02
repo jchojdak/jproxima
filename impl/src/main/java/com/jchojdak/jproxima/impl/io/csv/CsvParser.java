@@ -24,14 +24,14 @@ final class CsvParser {
     private final CsvParserConfig config;
     private final TypeInferrer typeInferrer;
     private final ValueConverter valueConverter;
-
-    private static final int INITIAL_COLUMN_CAPACITY = 1000;
+    private final RowCountEstimator rowCountEstimator;
 
     CsvParser(Path path, CsvParserConfig config) {
         this.path = path;
         this.config = config;
         this.typeInferrer = new TypeInferrer(config.nullValue());
         this.valueConverter = new ValueConverter(config.nullValue());
+        this.rowCountEstimator = new RowCountEstimator();
     }
 
     DataFrame parse() {
@@ -81,7 +81,7 @@ final class CsvParser {
         }
     }
 
-    private DataFrame buildDataFrame(CSVParser csvParser) {
+    private DataFrame buildDataFrame(CSVParser csvParser) throws IOException {
         Iterator<CSVRecord> it = csvParser.iterator();
         if (!it.hasNext()) {
             return DataFrameBuilder.create().build();
@@ -91,9 +91,10 @@ final class CsvParser {
         String[] columnNames = getColumnNames(csvParser, firstRecord);
         int columnCount = columnNames.length;
 
+        int initialCapacity = rowCountEstimator.estimate(path);
         List<List<String>> columnData = new ArrayList<>(columnCount);
         for (int i = 0; i < columnCount; i++) {
-            columnData.add(new ArrayList<>(INITIAL_COLUMN_CAPACITY));
+            columnData.add(new ArrayList<>(initialCapacity));
         }
 
         addRecord(columnData, firstRecord, columnCount);
