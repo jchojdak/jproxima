@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -23,6 +24,8 @@ final class CsvParser {
     private final CsvParserConfig config;
     private final TypeInferrer typeInferrer;
     private final ValueConverter valueConverter;
+
+    private static final int INITIAL_COLUMN_CAPACITY = 1000;
 
     CsvParser(Path path, CsvParserConfig config) {
         this.path = path;
@@ -79,16 +82,33 @@ final class CsvParser {
     }
 
     private DataFrame buildDataFrame(CSVParser csvParser) {
-        List<CSVRecord> records = csvParser.getRecords();
-
-        if (records.isEmpty()) {
+        Iterator<CSVRecord> it = csvParser.iterator();
+        if (!it.hasNext()) {
             return DataFrameBuilder.create().build();
         }
 
-        String[] columnNames = getColumnNames(csvParser, records.getFirst());
-        List<List<String>> columnData = extractColumnData(records, columnNames.length);
+        CSVRecord firstRecord = it.next();
+        String[] columnNames = getColumnNames(csvParser, firstRecord);
+        int columnCount = columnNames.length;
+
+        List<List<String>> columnData = new ArrayList<>(columnCount);
+        for (int i = 0; i < columnCount; i++) {
+            columnData.add(new ArrayList<>(INITIAL_COLUMN_CAPACITY));
+        }
+
+        addRecord(columnData, firstRecord, columnCount);
+
+        while (it.hasNext()) {
+            addRecord(columnData, it.next(), columnCount);
+        }
 
         return buildDataFrameFromColumns(columnNames, columnData);
+    }
+
+    private void addRecord(List<List<String>> columnData, CSVRecord record, int columnCount) {
+        for (int i = 0; i < columnCount && i < record.size(); i++) {
+            columnData.get(i).add(record.get(i));
+        }
     }
 
     private String[] getColumnNames(CSVParser csvParser, CSVRecord firstRecord) {
@@ -114,21 +134,6 @@ final class CsvParser {
             headers[i] = "Column" + i;
         }
         return headers;
-    }
-
-    private List<List<String>> extractColumnData(List<CSVRecord> records, int columnCount) {
-        List<List<String>> columnData = new ArrayList<>();
-        for (int i = 0; i < columnCount; i++) {
-            columnData.add(new ArrayList<>());
-        }
-
-        for (CSVRecord record : records) {
-            for (int i = 0; i < columnCount && i < record.size(); i++) {
-                columnData.get(i).add(record.get(i));
-            }
-        }
-
-        return columnData;
     }
 
     private DataFrame buildDataFrameFromColumns(String[] columnNames, List<List<String>> columnData) {
