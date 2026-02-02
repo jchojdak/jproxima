@@ -23,12 +23,12 @@ For example, using Maven:
     <dependency>
         <groupId>com.jchojdak</groupId>
         <artifactId>jproxima-api</artifactId>
-        <version>0.1.0</version><!-- use the latest version -->
+        <version>0.1.1</version><!-- use the latest version -->
     </dependency>
     <dependency>
         <groupId>com.jchojdak</groupId>
         <artifactId>jproxima-impl</artifactId>
-        <version>0.1.0</version><!-- use the latest version -->
+        <version>0.1.1</version><!-- use the latest version -->
         <scope>runtime</scope>
     </dependency>
 </dependencies>
