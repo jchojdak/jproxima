@@ -10,10 +10,10 @@
         <version>0.1.2</version>
     </parent>
 
-    <artifactId>jproxima-impl</artifactId>
+    <artifactId>jproxima</artifactId>
     <packaging>jar</packaging>
 
-    <name>JProxima Implementation</name>
+    <name>JProxima</name>
     <description>Machine learning and data manipulation library for the JVM.</description>
 
     <dependencies>
@@ -22,8 +22,9 @@
             <artifactId>jproxima-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-csv</artifactId>
+            <groupId>com.jchojdak</groupId>
+            <artifactId>jproxima-impl</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 </project>
