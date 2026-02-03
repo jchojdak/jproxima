@@ -6,14 +6,14 @@
 
     <parent>
         <groupId>com.jchojdak</groupId>
-        <artifactId>jproxima</artifactId>
-        <version>0.1.1</version>
+        <artifactId>jproxima-root</artifactId>
+        <version>0.1.2</version>
     </parent>
 
     <artifactId>jproxima-api</artifactId>
     <packaging>jar</packaging>
 
-    <name>JProxima - API</name>
-    <description>API module</description>
+    <name>JProxima API</name>
+    <description>Machine learning and data manipulation library for the JVM.</description>
 
 </project>
