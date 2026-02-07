@@ -95,7 +95,7 @@ class DefaultDataFrame implements DataFrame {
                 headData[i] = originalColumn.get(i);
             }
 
-            Column headColumn = new DefaultColumn(columnName, headData, originalColumn.getType());
+            Column headColumn = ColumnFactory.create(columnName, headData, originalColumn.getType());
             headColumns.put(columnName, headColumn);
         }
 
@@ -123,7 +123,7 @@ class DefaultDataFrame implements DataFrame {
                 tailData[i] = originalColumn.get(startIndex + i);
             }
 
-            Column tailColumn = new DefaultColumn(columnName, tailData, originalColumn.getType());
+            Column tailColumn = ColumnFactory.create(columnName, tailData, originalColumn.getType());
             tailColumns.put(columnName, tailColumn);
         }
 
