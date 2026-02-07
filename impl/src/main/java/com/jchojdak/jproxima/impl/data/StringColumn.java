@@ -11,7 +11,7 @@ final class StringColumn extends BaseColumn {
     private final String[] data;
 
     public StringColumn(String name, Object[] data) {
-        super(name, DataType.INTEGER, data.length);
+        super(name, DataType.STRING, data.length);
         this.data = new String[size];
 
         for (int i = 0; i < size; i++) {
