@@ -2,15 +2,24 @@ package com.jchojdak.jproxima.impl.data;
 
 import com.jchojdak.jproxima.data.DataType;
 
-import java.util.BitSet;
-
 final class BooleanColumn extends BaseColumn {
+
+    private static final boolean DEFAULT_NULL_VALUE = false;
 
     private final boolean[] data;
 
-    BooleanColumn(String name, boolean[] data, BitSet nullMask) {
-        super(name, DataType.BOOLEAN, data.length, nullMask);
-        this.data = data;
+    public BooleanColumn(String name, Object[] data) {
+        super(name, DataType.BOOLEAN, data.length);
+        this.data = new boolean[size];
+
+        for (int i = 0; i < size; i++) {
+            if (data[i] == null) {
+                nullMask.set(i);
+                this.data[i] = DEFAULT_NULL_VALUE;
+            } else {
+                this.data[i] = (Boolean) data[i];
+            }
+        }
     }
 
     @Override
@@ -22,7 +31,7 @@ final class BooleanColumn extends BaseColumn {
     public Object[] toArray() {
         Object[] result = new Object[size];
         for (int i = 0; i < size; i++) {
-            result[i] = isNull(i) ? data[i] : null;
+            result[i] = isNull(i) ? null : data[i];
         }
         return result;
     }

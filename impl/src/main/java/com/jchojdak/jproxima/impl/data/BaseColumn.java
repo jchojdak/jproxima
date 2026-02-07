@@ -22,11 +22,11 @@ abstract sealed class BaseColumn implements Column
     protected final int size;
     protected final BitSet nullMask;
 
-    protected BaseColumn(String name, DataType type, int size, BitSet nullMask) {
+    protected BaseColumn(String name, DataType type, int size) {
         this.name = name;
         this.type = type;
         this.size = size;
-        this.nullMask = nullMask;
+        this.nullMask = new BitSet(size);
     }
 
     @Override

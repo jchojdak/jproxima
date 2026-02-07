@@ -3,15 +3,25 @@ package com.jchojdak.jproxima.impl.data;
 import com.jchojdak.jproxima.data.DataType;
 
 import java.util.Arrays;
-import java.util.BitSet;
 
 final class StringColumn extends BaseColumn {
 
+    private static final String DEFAULT_NULL_VALUE = null;
+
     private final String[] data;
 
-    StringColumn(String name, String[] data, BitSet nullMask) {
-        super(name, DataType.STRING, data.length, nullMask);
-        this.data = data;
+    public StringColumn(String name, Object[] data) {
+        super(name, DataType.INTEGER, data.length);
+        this.data = new String[size];
+
+        for (int i = 0; i < size; i++) {
+            if (data[i] == null) {
+                nullMask.set(i);
+                this.data[i] = DEFAULT_NULL_VALUE;
+            } else {
+                this.data[i] = data[i].toString();
+            }
+        }
     }
 
     @Override
