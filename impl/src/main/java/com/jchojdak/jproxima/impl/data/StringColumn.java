@@ -10,7 +10,7 @@ final class StringColumn extends BaseColumn {
 
     private final String[] data;
 
-    public StringColumn(String name, Object[] data) {
+    StringColumn(String name, Object[] data) {
         super(name, DataType.STRING, data.length);
         this.data = new String[size];
 

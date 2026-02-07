@@ -8,7 +8,7 @@ final class DoubleColumn extends BaseColumn {
 
     private final double[] data;
 
-    public DoubleColumn(String name, Object[] data) {
+    DoubleColumn(String name, Object[] data) {
         super(name, DataType.DOUBLE, data.length);
         this.data = new double[size];
 

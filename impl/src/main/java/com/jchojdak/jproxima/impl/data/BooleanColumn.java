@@ -8,7 +8,7 @@ final class BooleanColumn extends BaseColumn {
 
     private final boolean[] data;
 
-    public BooleanColumn(String name, Object[] data) {
+    BooleanColumn(String name, Object[] data) {
         super(name, DataType.BOOLEAN, data.length);
         this.data = new boolean[size];
 
