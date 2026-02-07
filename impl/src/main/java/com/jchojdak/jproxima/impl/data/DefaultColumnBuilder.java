@@ -58,6 +58,7 @@ public class DefaultColumnBuilder implements ColumnBuilder {
         if (type == null) {
             throw new IllegalStateException("Type must be set before building");
         }
-        return new DefaultColumn(name, data.toArray(), type);
+
+        return ColumnFactory.create(name, data.toArray(), type);
     }
 }
