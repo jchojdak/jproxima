@@ -4,9 +4,25 @@ import java.util.ServiceLoader;
 
 /**
  * Builder for creating {@link Column} instances.
+ * <p>
+ * <b>This API is deprecated.</b> Use specialized builders for better performance:
+ * <ul>
+ *   <li>{@link IntColumnBuilder} for integer columns</li>
+ *   <li>{@link DoubleColumnBuilder} for double columns</li>
+ *   <li>{@link BooleanColumnBuilder} for boolean columns</li>
+ *   <li>{@link StringColumnBuilder} for string columns</li>
+ * </ul>
  *
+ * @deprecated Use type-specific builders ({@link IntColumnBuilder}, {@link DoubleColumnBuilder},
+ *             {@link BooleanColumnBuilder}, {@link StringColumnBuilder}) for zero-boxing performance
+ *             and better memory efficiency.
+ * @see IntColumnBuilder
+ * @see DoubleColumnBuilder
+ * @see BooleanColumnBuilder
+ * @see StringColumnBuilder
  * @see Column
  */
+@Deprecated(since = "0.2.0", forRemoval = true)
 public interface ColumnBuilder {
 
     /**
@@ -14,7 +30,9 @@ public interface ColumnBuilder {
      *
      * @param name the column name
      * @return {@code this} builder instance for method chaining
+     * @deprecated Use specialized builders instead
      */
+    @Deprecated(since = "0.2.0")
     ColumnBuilder name(String name);
 
     /**
@@ -22,7 +40,9 @@ public interface ColumnBuilder {
      *
      * @param type the data type
      * @return {@code this} builder instance for method chaining
+     * @deprecated Use specialized builders instead
      */
+    @Deprecated(since = "0.2.0")
     ColumnBuilder type(DataType type);
 
     /**
@@ -30,7 +50,9 @@ public interface ColumnBuilder {
      *
      * @param value the value to add
      * @return {@code this} builder instance for method chaining
+     * @deprecated Use specialized builders instead
      */
+    @Deprecated(since = "0.2.0")
     ColumnBuilder add(Object value);
 
     /**
@@ -40,7 +62,9 @@ public interface ColumnBuilder {
      *
      * @param values one or more values to add
      * @return {@code this} builder instance for method chaining
+     * @deprecated Use specialized builders instead
      */
+    @Deprecated(since = "0.2.0")
     ColumnBuilder addAll(Object[] values);
 
     /**
@@ -50,7 +74,9 @@ public interface ColumnBuilder {
      *
      * @param values an {@link Iterable} of values to add
      * @return {@code this} builder instance for method chaining
+     * @deprecated Use specialized builders instead
      */
+    @Deprecated(since = "0.2.0")
     ColumnBuilder addAll(Iterable<?> values);
 
     /**
@@ -59,7 +85,9 @@ public interface ColumnBuilder {
      *
      * @return immutable {@link Column} instance
      * @throws IllegalStateException if required fields are not set
+     * @deprecated Use specialized builders instead
      */
+    @Deprecated(since = "0.2.0")
     Column build();
 
     /**
@@ -68,7 +96,9 @@ public interface ColumnBuilder {
      *
      * @return new builder instance
      * @throws IllegalStateException if no implementation is found
+     * @deprecated Use specialized builders instead
      */
+    @Deprecated(since = "0.2.0")
     static ColumnBuilder create() {
         ServiceLoader<ColumnBuilder> loader = ServiceLoader.load(ColumnBuilder.class);
         return loader.findFirst()
