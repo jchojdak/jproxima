@@ -2,6 +2,9 @@ package com.jchojdak.jproxima.impl.data;
 
 import com.jchojdak.jproxima.data.*;
 
+/**
+ * Factory for creating {@link Column} instances from Object arrays.
+ */
 final class ColumnFactory {
 
     static Column create(String name, Object[] data, DataType type) {

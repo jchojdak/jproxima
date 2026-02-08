@@ -6,6 +6,9 @@ import com.jchojdak.jproxima.data.DataType;
 import java.util.Arrays;
 import java.util.BitSet;
 
+/**
+ * Default implementation of {@link BooleanColumn}.
+ */
 final class DefaultBooleanColumn extends BaseColumn implements BooleanColumn {
 
     private static final boolean DEFAULT_NULL_VALUE = false;

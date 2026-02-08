@@ -6,6 +6,9 @@ import com.jchojdak.jproxima.data.IntColumn;
 import java.util.Arrays;
 import java.util.BitSet;
 
+/**
+ * Default implementation of {@link IntColumn}.
+ */
 final class DefaultIntColumn extends BaseColumn implements IntColumn {
 
     private static final int DEFAULT_NULL_VALUE = 0;

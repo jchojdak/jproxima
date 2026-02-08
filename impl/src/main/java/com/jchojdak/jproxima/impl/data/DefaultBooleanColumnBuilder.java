@@ -6,6 +6,10 @@ import com.jchojdak.jproxima.data.BooleanColumnBuilder;
 import java.util.Arrays;
 import java.util.BitSet;
 
+/**
+ * Memory-efficient builder for {@link BooleanColumn}.
+ * Uses primitive boolean array.
+ */
 public final class DefaultBooleanColumnBuilder implements BooleanColumnBuilder {
 
     private static final int INITIAL_CAPACITY = 10;

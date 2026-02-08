@@ -5,6 +5,10 @@ import com.jchojdak.jproxima.data.StringColumnBuilder;
 
 import java.util.Arrays;
 
+/**
+ * Builder for {@link StringColumn}.
+ * Nulls are handled naturally in the String array.
+ */
 public final class DefaultStringColumnBuilder implements StringColumnBuilder {
 
     private static final int INITIAL_CAPACITY = 1024;

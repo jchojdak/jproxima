@@ -6,6 +6,10 @@ import com.jchojdak.jproxima.data.DoubleColumnBuilder;
 import java.util.Arrays;
 import java.util.BitSet;
 
+/**
+ * Memory-efficient builder for {@link DoubleColumn}.
+ * Uses primitive double array to avoid boxing overhead.
+ */
 public final class DefaultDoubleColumnBuilder implements DoubleColumnBuilder {
 
     private static final int INITIAL_CAPACITY = 1024;

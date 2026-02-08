@@ -6,6 +6,9 @@ import com.jchojdak.jproxima.data.DoubleColumn;
 import java.util.Arrays;
 import java.util.BitSet;
 
+/**
+ * Default implementation of {@link DoubleColumn}.
+ */
 final class DefaultDoubleColumn extends BaseColumn implements DoubleColumn {
 
     private static final double DEFAULT_NULL_VALUE = 0.0;

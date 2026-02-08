@@ -8,9 +8,13 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Base implementation of {@link Column}
+ * Base implementation of {@link Column} providing common functionality for all column types
  *
  * @see Column
+ * @see DefaultIntColumn
+ * @see DefaultDoubleColumn
+ * @see DefaultBooleanColumn
+ * @see DefaultStringColumn
  */
 abstract sealed class BaseColumn implements Column
         permits DefaultIntColumn, DefaultDoubleColumn, DefaultBooleanColumn, DefaultStringColumn {

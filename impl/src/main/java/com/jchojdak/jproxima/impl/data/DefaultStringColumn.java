@@ -5,6 +5,9 @@ import com.jchojdak.jproxima.data.StringColumn;
 
 import java.util.Arrays;
 
+/**
+ * Default implementation of {@link StringColumn}.
+ */
 final class DefaultStringColumn extends BaseColumn implements StringColumn {
 
     private static final String DEFAULT_NULL_VALUE = null;

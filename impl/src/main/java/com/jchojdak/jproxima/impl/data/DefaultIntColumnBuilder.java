@@ -6,6 +6,10 @@ import com.jchojdak.jproxima.data.IntColumnBuilder;
 import java.util.Arrays;
 import java.util.BitSet;
 
+/**
+ * Memory-efficient builder for {@link IntColumn}.
+ * Uses primitive int array to avoid boxing overhead.
+ */
 public final class DefaultIntColumnBuilder implements IntColumnBuilder {
 
     private static final int INITIAL_CAPACITY = 1024;
