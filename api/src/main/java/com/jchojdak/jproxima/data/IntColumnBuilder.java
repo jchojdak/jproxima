@@ -42,7 +42,7 @@ public interface IntColumnBuilder {
     IntColumnBuilder addNull();
 
     /**
-     * Builds and returns the final immutable {@link IntColumn}
+     * Builds and returns the final immutable {@link IntColumn}.
      *
      * @return immutable {@link IntColumn} instance
      */
