@@ -66,7 +66,56 @@ DataFrame dfCsv = DataFrameReader.read("data.csv");
 DataFrame dfExcel = DataFrameReader.read("data.xlsx");
 ```
 
-### Creating column
+### Creating column (new API)
+
+The generic `ColumnBuilder` API has been **deprecated** in favor of type-specific builders for better performance and memory efficiency.
+
+#### Integer columns
+```java
+int[] data = {1, 2, 3, 4, 5};
+
+IntColumn column = IntColumnBuilder.init()
+        .name("numbers")
+        .add(data)
+        .add(6)
+        .addNull() // for null values
+        .add(8)
+        .build();
+```
+
+#### Double columns
+```java
+DoubleColumn prices = DoubleColumnBuilder.init()
+        .name("price")
+        .add(19.99)
+        .add(29.99)
+        .add(39.99)
+        .build();
+```
+
+#### String columns
+```java
+String[] names = {"Alice", "Bob", "Charlie"};
+
+StringColumn column = StringColumnBuilder.init()
+        .name("name")
+        .add(names)
+        .add(null) // nulls are supported
+        .build();
+```
+
+#### Boolean columns
+```java
+BooleanColumn isActive = BooleanColumnBuilder.init()
+        .name("isActive")
+        .add(true)
+        .add(false)
+        .add(true)
+        .addNull()
+        .build();
+```
+
+### Creating column (old API)
 Creates a column named "testColumn" containing string values.
 ```java
 String[] data = {"value1", "value2", "value3"};
