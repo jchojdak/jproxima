@@ -23,7 +23,6 @@ public interface Column {
      */
     int size();
 
-
     /**
      * Returns the type of this column.
      *
@@ -54,4 +53,6 @@ public interface Column {
      * @return string representation of the column
      */
     String toString(int displayLimit);
+
+    boolean isNull(int index);
 }

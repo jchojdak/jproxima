@@ -1,16 +1,17 @@
 package com.jchojdak.jproxima.impl.data;
 
 import com.jchojdak.jproxima.data.DataType;
+import com.jchojdak.jproxima.data.StringColumn;
 
 import java.util.Arrays;
 
-final class StringColumn extends BaseColumn {
+final class DefaultStringColumn extends BaseColumn implements StringColumn {
 
     private static final String DEFAULT_NULL_VALUE = null;
 
     private final String[] data;
 
-    StringColumn(String name, Object[] data) {
+    DefaultStringColumn(String name, Object[] data) {
         super(name, DataType.STRING, data.length);
         this.data = new String[size];
 
@@ -22,6 +23,16 @@ final class StringColumn extends BaseColumn {
                 this.data[i] = data[i].toString();
             }
         }
+    }
+
+    @Override
+    public String getString(int index) {
+        return data[index];
+    }
+
+    @Override
+    public String[] toStringArray() {
+        return Arrays.copyOf(data, size);
     }
 
     @Override

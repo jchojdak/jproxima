@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @see ColumnBuilder
  */
-public class DefaultColumnBuilder implements ColumnBuilder {
+public final class DefaultColumnBuilder implements ColumnBuilder {
 
     private String name;
     private DataType type;

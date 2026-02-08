@@ -1,14 +1,26 @@
 package com.jchojdak.jproxima.impl.data;
 
 import com.jchojdak.jproxima.data.DataType;
+import com.jchojdak.jproxima.data.DoubleColumn;
 
-final class DoubleColumn extends BaseColumn {
+import java.util.Arrays;
+import java.util.BitSet;
+
+final class DefaultDoubleColumn extends BaseColumn implements DoubleColumn {
 
     private static final double DEFAULT_NULL_VALUE = 0.0;
 
     private final double[] data;
 
-    DoubleColumn(String name, Object[] data) {
+    DefaultDoubleColumn(String name, double[] data, BitSet nullMask) {
+        super(name, DataType.DOUBLE, data.length);
+        this.data = data;
+        if (nullMask != null) {
+            this.nullMask.or(nullMask);
+        }
+    }
+
+    DefaultDoubleColumn(String name, Object[] data) {
         super(name, DataType.DOUBLE, data.length);
         this.data = new double[size];
 
@@ -20,6 +32,19 @@ final class DoubleColumn extends BaseColumn {
                 this.data[i] = ((Number) data[i]).doubleValue();
             }
         }
+    }
+
+    @Override
+    public double getDouble(int index) {
+        if (isNull(index)) {
+            throw new NullPointerException("Null value at index " + index);
+        }
+        return data[index];
+    }
+
+    @Override
+    public double[] toDoubleArray() {
+        return Arrays.copyOf(data, size);
     }
 
     @Override

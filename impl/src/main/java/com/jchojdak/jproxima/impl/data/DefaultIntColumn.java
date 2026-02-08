@@ -1,14 +1,26 @@
 package com.jchojdak.jproxima.impl.data;
 
 import com.jchojdak.jproxima.data.DataType;
+import com.jchojdak.jproxima.data.IntColumn;
 
-final class IntColumn extends BaseColumn {
+import java.util.Arrays;
+import java.util.BitSet;
+
+final class DefaultIntColumn extends BaseColumn implements IntColumn {
 
     private static final int DEFAULT_NULL_VALUE = 0;
 
     private final int[] data;
 
-    IntColumn(String name, Object[] data) {
+    DefaultIntColumn(String name, int[] data, BitSet nullMask) {
+        super(name, DataType.INTEGER, data.length);
+        this.data = data;
+        if (nullMask != null) {
+            this.nullMask.or(nullMask);
+        }
+    }
+
+    DefaultIntColumn(String name, Object[] data) {
         super(name, DataType.INTEGER, data.length);
         this.data = new int[size];
 
@@ -20,6 +32,19 @@ final class IntColumn extends BaseColumn {
                 this.data[i] = ((Number) data[i]).intValue();
             }
         }
+    }
+
+    @Override
+    public int getInt(int index) {
+        if (isNull(index)) {
+            throw new NullPointerException("Null value at index " + index);
+        }
+        return data[index];
+    }
+
+    @Override
+    public int[] toIntArray() {
+        return Arrays.copyOf(data, size);
     }
 
     @Override

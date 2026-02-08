@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
  * @see Column
  */
 abstract sealed class BaseColumn implements Column
-        permits IntColumn, DoubleColumn, BooleanColumn, StringColumn {
+        permits DefaultIntColumn, DefaultDoubleColumn, DefaultBooleanColumn, DefaultStringColumn {
 
     protected static final int DEFAULT_DISPLAY_LIMIT = 10;
 
@@ -67,7 +67,8 @@ abstract sealed class BaseColumn implements Column
         return sb.toString();
     }
 
-    protected final boolean isNull(int index) {
+    @Override
+    public final boolean isNull(int index) {
         return nullMask.get(index);
     }
 
