@@ -23,7 +23,6 @@ public interface Column {
      */
     int size();
 
-
     /**
      * Returns the type of this column.
      *
@@ -54,4 +53,16 @@ public interface Column {
      * @return string representation of the column
      */
     String toString(int displayLimit);
+
+    /**
+     * Checks if the value at the specified index is null.
+     * <p>
+     * For primitive columns, use this method before calling specialized getters
+     * to avoid {@link NullPointerException}.
+     *
+     * @param index row index
+     * @return {@code true} if the value at the specified index is null,
+     *         {@code false} otherwise
+     */
+    boolean isNull(int index);
 }

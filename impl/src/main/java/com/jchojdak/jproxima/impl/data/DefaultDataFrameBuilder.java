@@ -24,12 +24,13 @@ public class DefaultDataFrameBuilder implements DataFrameBuilder {
     @Override
     public DataFrameBuilder addColumn(String name, Object[] data) {
         DataType type = DataType.from(data);
-        return addColumn(new DefaultColumn(name, data, type));
+        return addColumn(name, data, type);
     }
 
     @Override
     public DataFrameBuilder addColumn(String name, Object[] data, DataType type) {
-        return addColumn(new DefaultColumn(name, data, type));
+        Column column = ColumnFactory.create(name, data, type);
+        return addColumn(column);
     }
 
     @Override
