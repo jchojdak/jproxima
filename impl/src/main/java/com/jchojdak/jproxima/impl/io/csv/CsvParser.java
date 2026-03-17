@@ -11,27 +11,25 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Parses CSV files into DataFrames.
  */
 final class CsvParser {
 
+    private static final int BLOCK_SIZE = 10_000;
+
     private final Path path;
     private final CsvParserConfig config;
     private final TypeInferrer typeInferrer;
     private final ValueConverter valueConverter;
-    private final RowCountEstimator rowCountEstimator;
 
     CsvParser(Path path, CsvParserConfig config) {
         this.path = path;
         this.config = config;
         this.typeInferrer = new TypeInferrer(config.nullValue());
         this.valueConverter = new ValueConverter(config.nullValue());
-        this.rowCountEstimator = new RowCountEstimator();
     }
 
     DataFrame parse() {
@@ -48,6 +46,109 @@ final class CsvParser {
         }
     }
 
+    private DataFrame parseDirectly(CSVFormat format) throws IOException {
+        try (CSVParser parser = CSVParser.parse(path, config.encoding(), format)) {
+            return buildDataFrame(parser);
+        }
+    }
+
+    private DataFrame parseWithSkipRows(CSVFormat format) throws IOException {
+        try (BufferedReader reader = Files.newBufferedReader(path, config.encoding())) {
+
+            for (int i = 0; i < config.skipRows(); i++) {
+                reader.readLine();
+            }
+
+            try (CSVParser parser = CSVParser.parse(reader, format)) {
+                return buildDataFrame(parser);
+            }
+        }
+    }
+
+    private DataFrame buildDataFrame(CSVParser parser) {
+        Iterator<CSVRecord> it = parser.iterator();
+
+        if (!it.hasNext()) {
+            return DataFrameBuilder.create().build();
+        }
+
+        CSVRecord firstRecord = it.next();
+
+        String[] columnNames = getColumnNames(parser, firstRecord);
+        int columnCount = columnNames.length;
+
+        DataType[] columnTypes = inferColumnTypes(firstRecord, columnCount);
+        List<List<Object>> buffers = createBuffers(columnCount);
+
+        DataFrameBuilder dfBuilder = DataFrameBuilder.create();
+
+        int rowCount = 0;
+
+        addRecord(firstRecord, columnCount, buffers, columnTypes);
+        rowCount++;
+
+        while (it.hasNext()) {
+            CSVRecord record = it.next();
+            addRecord(record, columnCount, buffers, columnTypes);
+            rowCount++;
+
+            if (rowCount >= BLOCK_SIZE) {
+                flushBuffers(dfBuilder, columnNames, columnTypes, buffers);
+                rowCount = 0;
+            }
+        }
+
+        flushBuffers(dfBuilder, columnNames, columnTypes, buffers);
+
+        return dfBuilder.build();
+    }
+
+    private DataType[] inferColumnTypes(CSVRecord firstRecord, int columnCount) {
+        DataType[] types = new DataType[columnCount];
+
+        for (int i = 0; i < columnCount; i++) {
+            types[i] = typeInferrer.inferType(firstRecord.get(i));
+        }
+
+        return types;
+    }
+
+    private List<List<Object>> createBuffers(int columnCount) {
+        List<List<Object>> buffers = new ArrayList<>(columnCount);
+
+        for (int i = 0; i < columnCount; i++) {
+            buffers.add(new ArrayList<>(BLOCK_SIZE));
+        }
+
+        return buffers;
+    }
+
+    private void addRecord(CSVRecord record,
+                           int columnCount,
+                           List<List<Object>> buffers,
+                           DataType[] types) {
+
+        for (int i = 0; i < columnCount && i < record.size(); i++) {
+            Object value = valueConverter.convert(record.get(i), types[i]);
+            buffers.get(i).add(value);
+        }
+    }
+
+    private void flushBuffers(DataFrameBuilder dfBuilder,
+                              String[] columnNames,
+                              DataType[] types,
+                              List<List<Object>> buffers) {
+
+        for (int i = 0; i < columnNames.length; i++) {
+            List<Object> buf = buffers.get(i);
+
+            if (!buf.isEmpty()) {
+                dfBuilder.addColumn(columnNames[i], buf.toArray(), types[i]);
+                buf.clear();
+            }
+        }
+    }
+
     private CSVFormat buildCsvFormat() {
         CSVFormat.Builder builder = CSVFormat.DEFAULT.builder()
                 .setDelimiter(config.delimiter())
@@ -56,74 +157,27 @@ final class CsvParser {
                 .setNullString(config.nullValue());
 
         if (config.hasHeader()) {
-            builder.setHeader()
-                    .setSkipHeaderRecord(true);
+            builder.setHeader().setSkipHeaderRecord(true);
         }
 
         return builder.get();
     }
 
-    private DataFrame parseWithSkipRows(CSVFormat format) throws IOException {
-        try (BufferedReader reader = Files.newBufferedReader(path, config.encoding())) {
-            for (int i = 0; i < config.skipRows(); i++) {
-                reader.readLine();
-            }
+    private String[] getColumnNames(CSVParser parser, CSVRecord firstRecord) {
+        if (config.hasHeader()
+                && parser.getHeaderMap() != null
+                && !parser.getHeaderMap().isEmpty()) {
 
-            try (CSVParser csvParser = CSVParser.parse(reader, format)) {
-                return buildDataFrame(csvParser);
-            }
+            return extractHeaderNames(parser);
         }
+
+        return generateDefaultColumnNames(firstRecord.size());
     }
 
-    private DataFrame parseDirectly(CSVFormat format) throws IOException {
-        try (CSVParser csvParser = CSVParser.parse(path, config.encoding(), format)) {
-            return buildDataFrame(csvParser);
-        }
-    }
+    private String[] extractHeaderNames(CSVParser parser) {
+        String[] headers = new String[parser.getHeaderMap().size()];
 
-    private DataFrame buildDataFrame(CSVParser csvParser) throws IOException {
-        Iterator<CSVRecord> it = csvParser.iterator();
-        if (!it.hasNext()) {
-            return DataFrameBuilder.create().build();
-        }
-
-        CSVRecord firstRecord = it.next();
-        String[] columnNames = getColumnNames(csvParser, firstRecord);
-        int columnCount = columnNames.length;
-
-        int initialCapacity = rowCountEstimator.estimate(path);
-        List<List<String>> columnData = new ArrayList<>(columnCount);
-        for (int i = 0; i < columnCount; i++) {
-            columnData.add(new ArrayList<>(initialCapacity));
-        }
-
-        addRecord(columnData, firstRecord, columnCount);
-
-        while (it.hasNext()) {
-            addRecord(columnData, it.next(), columnCount);
-        }
-
-        return buildDataFrameFromColumns(columnNames, columnData);
-    }
-
-    private void addRecord(List<List<String>> columnData, CSVRecord record, int columnCount) {
-        for (int i = 0; i < columnCount && i < record.size(); i++) {
-            columnData.get(i).add(record.get(i));
-        }
-    }
-
-    private String[] getColumnNames(CSVParser csvParser, CSVRecord firstRecord) {
-        if (config.hasHeader() && csvParser.getHeaderMap() != null && !csvParser.getHeaderMap().isEmpty()) {
-            return extractHeaderNames(csvParser);
-        } else {
-            return generateDefaultColumnNames(firstRecord.size());
-        }
-    }
-
-    private String[] extractHeaderNames(CSVParser csvParser) {
-        String[] headers = new String[csvParser.getHeaderMap().size()];
-
-        csvParser.getHeaderMap()
+        parser.getHeaderMap()
                 .forEach((name, index) -> headers[index] = name);
 
         return headers;
@@ -131,31 +185,11 @@ final class CsvParser {
 
     private String[] generateDefaultColumnNames(int count) {
         String[] headers = new String[count];
+
         for (int i = 0; i < count; i++) {
             headers[i] = "Column" + i;
         }
+
         return headers;
-    }
-
-    private DataFrame buildDataFrameFromColumns(String[] columnNames, List<List<String>> columnData) {
-        DataFrameBuilder dataFrameBuilder = DataFrameBuilder.create();
-
-        for (int i = 0; i < columnNames.length; i++) {
-            Column column = buildColumn(columnNames[i], columnData.get(i));
-            dataFrameBuilder.addColumn(column);
-        }
-
-        return dataFrameBuilder.build();
-    }
-
-    private Column buildColumn(String name, List<String> data) {
-        DataType type = typeInferrer.inferType(data);
-        Object[] typedData = valueConverter.convertAll(data, type);
-
-        return ColumnBuilder.create()
-                .name(name)
-                .type(type)
-                .addAll(typedData)
-                .build();
     }
 }
