@@ -72,24 +72,24 @@ final class CsvParser {
             return DataFrameBuilder.create().build();
         }
 
-        CSVRecord firstRecord = it.next();
+        CSVRecord firstRow = it.next();
 
-        String[] columnNames = getColumnNames(parser, firstRecord);
+        String[] columnNames = getColumnNames(parser, firstRow);
         int columnCount = columnNames.length;
 
-        DataType[] columnTypes = inferColumnTypes(firstRecord, columnCount);
+        DataType[] columnTypes = inferColumnTypes(firstRow, columnCount);
         List<List<Object>> buffers = createBuffers(columnCount);
 
         DataFrameBuilder dfBuilder = DataFrameBuilder.create();
 
         int rowCount = 0;
 
-        addRecord(firstRecord, columnCount, buffers, columnTypes);
+        addRow(firstRow, columnCount, buffers, columnTypes);
         rowCount++;
 
         while (it.hasNext()) {
-            CSVRecord record = it.next();
-            addRecord(record, columnCount, buffers, columnTypes);
+            CSVRecord row = it.next();
+            addRow(row, columnCount, buffers, columnTypes);
             rowCount++;
 
             if (rowCount >= BLOCK_SIZE) {
@@ -103,11 +103,11 @@ final class CsvParser {
         return dfBuilder.build();
     }
 
-    private DataType[] inferColumnTypes(CSVRecord firstRecord, int columnCount) {
+    private DataType[] inferColumnTypes(CSVRecord firstRow, int columnCount) {
         DataType[] types = new DataType[columnCount];
 
         for (int i = 0; i < columnCount; i++) {
-            types[i] = typeInferrer.inferType(firstRecord.get(i));
+            types[i] = typeInferrer.inferType(firstRow.get(i));
         }
 
         return types;
@@ -123,13 +123,13 @@ final class CsvParser {
         return buffers;
     }
 
-    private void addRecord(CSVRecord record,
+    private void addRow(CSVRecord row,
                            int columnCount,
                            List<List<Object>> buffers,
                            DataType[] types) {
 
-        for (int i = 0; i < columnCount && i < record.size(); i++) {
-            Object value = valueConverter.convert(record.get(i), types[i]);
+        for (int i = 0; i < columnCount && i < row.size(); i++) {
+            Object value = valueConverter.convert(row.get(i), types[i]);
             buffers.get(i).add(value);
         }
     }
@@ -163,7 +163,7 @@ final class CsvParser {
         return builder.get();
     }
 
-    private String[] getColumnNames(CSVParser parser, CSVRecord firstRecord) {
+    private String[] getColumnNames(CSVParser parser, CSVRecord firstRow) {
         if (config.hasHeader()
                 && parser.getHeaderMap() != null
                 && !parser.getHeaderMap().isEmpty()) {
@@ -171,7 +171,7 @@ final class CsvParser {
             return extractHeaderNames(parser);
         }
 
-        return generateDefaultColumnNames(firstRecord.size());
+        return generateDefaultColumnNames(firstRow.size());
     }
 
     private String[] extractHeaderNames(CSVParser parser) {
