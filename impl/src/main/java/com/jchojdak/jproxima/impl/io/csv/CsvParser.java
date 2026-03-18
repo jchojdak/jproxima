@@ -125,9 +125,9 @@ final class CsvParser {
     }
 
     private void addRow(CSVRecord row,
-                           int columnCount,
-                           List<List<Object>> buffers,
-                           DataType[] types) {
+                        int columnCount,
+                        List<List<Object>> buffers,
+                        DataType[] types) {
 
         for (int i = 0; i < columnCount && i < row.size(); i++) {
             Object value = converter.convert(row.get(i), types[i]);
