@@ -18,7 +18,8 @@ import java.util.*;
  */
 final class CsvParser {
 
-    private static final int BLOCK_SIZE = 10_000;
+    private static final int BUFFER_FLUSH_SIZE = 10_000;
+    private static final int INITIAL_BUFFER_CAPACITY = 10_000;
 
     private final Path path;
     private final CsvParserConfig config;
@@ -66,13 +67,13 @@ final class CsvParser {
     }
 
     private DataFrame buildDataFrame(CSVParser parser) {
-        Iterator<CSVRecord> it = parser.iterator();
+        Iterator<CSVRecord> rows = parser.iterator();
 
-        if (!it.hasNext()) {
+        if (!rows.hasNext()) {
             return DataFrameBuilder.create().build();
         }
 
-        CSVRecord firstRow = it.next();
+        CSVRecord firstRow = rows.next();
 
         String[] columnNames = getColumnNames(parser, firstRow);
         int columnCount = columnNames.length;
@@ -80,27 +81,27 @@ final class CsvParser {
         DataType[] columnTypes = inferColumnTypes(firstRow, columnCount);
         List<List<Object>> buffers = createBuffers(columnCount);
 
-        DataFrameBuilder dfBuilder = DataFrameBuilder.create();
+        DataFrameBuilder builder = DataFrameBuilder.create();
 
         int rowCount = 0;
 
         addRow(firstRow, columnCount, buffers, columnTypes);
         rowCount++;
 
-        while (it.hasNext()) {
-            CSVRecord row = it.next();
+        while (rows.hasNext()) {
+            CSVRecord row = rows.next();
             addRow(row, columnCount, buffers, columnTypes);
             rowCount++;
 
-            if (rowCount >= BLOCK_SIZE) {
-                flushBuffers(dfBuilder, columnNames, columnTypes, buffers);
+            if (rowCount >= BUFFER_FLUSH_SIZE) {
+                flushBuffers(builder, columnNames, columnTypes, buffers);
                 rowCount = 0;
             }
         }
 
-        flushBuffers(dfBuilder, columnNames, columnTypes, buffers);
+        flushBuffers(builder, columnNames, columnTypes, buffers);
 
-        return dfBuilder.build();
+        return builder.build();
     }
 
     private DataType[] inferColumnTypes(CSVRecord firstRow, int columnCount) {
@@ -117,7 +118,7 @@ final class CsvParser {
         List<List<Object>> buffers = new ArrayList<>(columnCount);
 
         for (int i = 0; i < columnCount; i++) {
-            buffers.add(new ArrayList<>(BLOCK_SIZE));
+            buffers.add(new ArrayList<>(INITIAL_BUFFER_CAPACITY));
         }
 
         return buffers;
@@ -134,17 +135,17 @@ final class CsvParser {
         }
     }
 
-    private void flushBuffers(DataFrameBuilder dfBuilder,
+    private void flushBuffers(DataFrameBuilder builder,
                               String[] columnNames,
                               DataType[] types,
                               List<List<Object>> buffers) {
 
         for (int i = 0; i < columnNames.length; i++) {
-            List<Object> buf = buffers.get(i);
+            List<Object> columnBuffer = buffers.get(i);
 
-            if (!buf.isEmpty()) {
-                dfBuilder.addColumn(columnNames[i], buf.toArray(), types[i]);
-                buf.clear();
+            if (!columnBuffer.isEmpty()) {
+                builder.addColumn(columnNames[i], columnBuffer.toArray(), types[i]);
+                columnBuffer.clear();
             }
         }
     }
