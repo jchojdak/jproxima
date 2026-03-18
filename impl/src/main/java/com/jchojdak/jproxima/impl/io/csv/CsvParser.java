@@ -57,7 +57,8 @@ final class CsvParser {
         try (BufferedReader reader = Files.newBufferedReader(path, config.encoding())) {
 
             for (int i = 0; i < config.skipRows(); i++) {
-                if (reader.readLine() == null) break;
+                String skippedLine = reader.readLine();
+                if (skippedLine == null) break;
             }
 
             try (CSVParser parser = CSVParser.parse(reader, format)) {
