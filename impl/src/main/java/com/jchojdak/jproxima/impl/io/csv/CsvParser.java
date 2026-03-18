@@ -23,13 +23,13 @@ final class CsvParser {
     private final Path path;
     private final CsvParserConfig config;
     private final TypeInferrer typeInferrer;
-    private final ValueConverter valueConverter;
+    private final ValueConverter converter;
 
     CsvParser(Path path, CsvParserConfig config) {
         this.path = path;
         this.config = config;
         this.typeInferrer = new TypeInferrer(config.nullValue());
-        this.valueConverter = new ValueConverter(config.nullValue());
+        this.converter = new ValueConverter(config.nullValue());
     }
 
     DataFrame parse() {
@@ -129,7 +129,7 @@ final class CsvParser {
                            DataType[] types) {
 
         for (int i = 0; i < columnCount && i < row.size(); i++) {
-            Object value = valueConverter.convert(row.get(i), types[i]);
+            Object value = converter.convert(row.get(i), types[i]);
             buffers.get(i).add(value);
         }
     }
