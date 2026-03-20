@@ -63,10 +63,9 @@ class DefaultDataFrameTest {
                 .addColumn("col1", new Object[]{1, 2})
                 .build();
 
-        Column newColumn = ColumnBuilder.create()
+        Column newColumn = StringColumnBuilder.init()
                 .name("col2")
-                .type(DataType.STRING)
-                .addAll(new Object[]{"a", "b"})
+                .add(new String[]{"a", "b"})
                 .build();
 
         DataFrame result = df.addColumn(newColumn);
@@ -83,10 +82,9 @@ class DefaultDataFrameTest {
                 .addColumn("col1", new Object[]{1, 2})
                 .build();
 
-        Column newColumn = ColumnBuilder.create()
+        Column newColumn = StringColumnBuilder.init()
                 .name(name)
-                .type(DataType.STRING)
-                .addAll(new Object[]{"a", "b"})
+                .add(new String[]{"a", "b"})
                 .build();
 
         DataFrame result = df.addColumn(name, newColumn);
