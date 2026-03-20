@@ -10,7 +10,7 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=jchojdak_jproxima&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=jchojdak_jproxima)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=jchojdak_jproxima&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=jchojdak_jproxima)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=jchojdak_jproxima&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=jchojdak_jproxima)
-
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jchojdak_jproxima&metric=coverage)](https://sonarcloud.io/summary/new_code?id=jchojdak_jproxima)
 
 ## About
 JProxima is a JVM library (Java/Kotlin/Scala and more) that provides tools for data manipulation and machine learning model building.
@@ -19,7 +19,7 @@ while the impl module is decoupled and can be easily swapped or extended, allowi
 
 ## Features
  - **Immutable data structures**: Thread-safe DataFrame and Column data structures
- - **File I/O**: Read CSV and Excel files into DataFrame objects
+ - **File I/O**: Read/write CSV and Excel files
  - **Fluent API**: Builder pattern for intuitive data manipulation
  - **Type-safe**: Automatic type inference and strong type safety via DataType
 
@@ -80,7 +80,7 @@ DataFrame dfExcel = DataFrameReader.read("data.xlsx");
 ```java
 DataFrame df = DataFrameReader.read("data.csv");
 
-df.toCsv("data.csv");
+df.toCsv("data-01.csv");
 ```
 
 **Excel**
@@ -89,7 +89,7 @@ df.toCsv("data.csv");
 ```java
 DataFrame df = DataFrameReader.read("data.xlsx");
 
-df.toXlsx("data.xlsx");
+df.toXlsx("data-01.xlsx");
 ```
 
 ### Creating column (new API)
