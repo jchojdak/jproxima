@@ -3,6 +3,11 @@ package com.jchojdak.jproxima.impl.data;
 import com.jchojdak.jproxima.data.*;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class DefaultDataFrameTest {
@@ -234,5 +239,48 @@ class DefaultDataFrameTest {
         String result = df.toString();
 
         assertEquals("<Empty DataFrame>", result);
+    }
+
+    @Test
+    void shouldWriteToCsv() throws IOException {
+        DataFrame df = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2})
+                .addColumn("col2", new Object[]{"a", "b"})
+                .build();
+
+        Path tempFile = Files.createTempFile("test_df", ".csv");
+        try {
+            df.toCsv(tempFile.toString());
+
+            List<String> lines = Files.readAllLines(tempFile);
+            assertEquals(3, lines.size());
+            assertEquals("col1,col2", lines.get(0));
+            assertEquals("1,a", lines.get(1));
+            assertEquals("2,b", lines.get(2));
+        } finally {
+            Files.deleteIfExists(tempFile);
+        }
+    }
+
+    @Test
+    void shouldEscapeSpecialCharactersInCsv() throws IOException {
+        DataFrame df = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{"a,b", "c\"d", "e\nf"})
+                .build();
+
+        Path tempFile = Files.createTempFile("test_df_escape", ".csv");
+        try {
+            df.toCsv(tempFile.toString());
+
+            String content = Files.readString(tempFile);
+
+            String normalized = content.replace("\r\n", "\n");
+
+            assertTrue(normalized.contains("\"a,b\""));
+            assertTrue(normalized.contains("\"c\"\"d\""));
+            assertTrue(normalized.contains("\"e\nf\""));
+        } finally {
+            Files.deleteIfExists(tempFile);
+        }
     }
 }

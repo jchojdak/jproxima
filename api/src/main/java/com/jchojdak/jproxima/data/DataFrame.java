@@ -93,4 +93,11 @@ public interface DataFrame {
      * @return string representation of the DataFrame
      */
     String toString(int displayLimit);
+
+    /**
+     * Writes the DataFrame to a CSV file.
+     *
+     * @param path path to the output file
+     */
+    void toCsv(String path);
 }
