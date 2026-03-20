@@ -2,6 +2,7 @@ package com.jchojdak.jproxima.impl.data;
 
 import com.jchojdak.jproxima.data.Column;
 import com.jchojdak.jproxima.data.DataFrame;
+import com.jchojdak.jproxima.impl.io.csv.CsvWriter;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -186,6 +187,11 @@ class DefaultDataFrame implements DataFrame {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public void toCsv(String path) {
+        CsvWriter.write(path, columns.values());
     }
 
     private int[] calculateColumnWidths(String[] columnNames, int rowsToShow) {
