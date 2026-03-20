@@ -17,6 +17,14 @@ public interface Column {
     Object get(int index);
 
     /**
+     * Checks if the value at the specified index is null.
+     *
+     * @param index row index
+     * @return {@code true} if the value is null, {@code false} otherwise
+     */
+    boolean isNull(int index);
+
+    /**
      * Returns the number of rows in this column.
      *
      * @return number of rows
@@ -53,16 +61,4 @@ public interface Column {
      * @return string representation of the column
      */
     String toString(int displayLimit);
-
-    /**
-     * Checks if the value at the specified index is null.
-     * <p>
-     * For primitive columns, use this method before calling specialized getters
-     * to avoid {@link NullPointerException}.
-     *
-     * @param index row index
-     * @return {@code true} if the value at the specified index is null,
-     *         {@code false} otherwise
-     */
-    boolean isNull(int index);
 }
