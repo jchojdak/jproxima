@@ -18,7 +18,6 @@ import java.util.*;
  */
 final class CsvParser {
 
-    private static final int BUFFER_FLUSH_SIZE = 10_000;
     private static final int INITIAL_BUFFER_CAPACITY = 10_000;
 
     private final Path path;
@@ -93,11 +92,6 @@ final class CsvParser {
             CSVRecord row = rows.next();
             addRow(row, columnCount, buffers, columnTypes);
             rowCount++;
-
-            if (rowCount >= BUFFER_FLUSH_SIZE) {
-                flushBuffers(builder, columnNames, columnTypes, buffers);
-                rowCount = 0;
-            }
         }
 
         flushBuffers(builder, columnNames, columnTypes, buffers);
