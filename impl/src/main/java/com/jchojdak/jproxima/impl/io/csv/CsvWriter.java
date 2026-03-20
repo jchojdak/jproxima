@@ -55,7 +55,7 @@ public class CsvWriter {
                 csvPrinter.println();
             }
         } catch (IOException e) {
-            throw new RuntimeException("Error writing CSV file: " + path, e);
+            throw new CsvWriteException("Error writing CSV file: " + path);
         }
     }
 
