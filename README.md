@@ -23,12 +23,12 @@ For example, using Maven:
     <dependency>
         <groupId>com.jchojdak</groupId>
         <artifactId>jproxima-api</artifactId>
-        <version>0.2.0</version><!-- use the latest version -->
+        <version>0.3.0</version><!-- use the latest version -->
     </dependency>
     <dependency>
         <groupId>com.jchojdak</groupId>
         <artifactId>jproxima-impl</artifactId>
-        <version>0.2.0</version><!-- use the latest version -->
+        <version>0.3.0</version><!-- use the latest version -->
         <scope>runtime</scope>
     </dependency>
 </dependencies>
@@ -64,6 +64,21 @@ DataFrame df = DataFrameReader.excel("data.xlsx")
 ```java
 DataFrame dfCsv = DataFrameReader.read("data.csv");
 DataFrame dfExcel = DataFrameReader.read("data.xlsx");
+```
+
+### Saving to file
+**CSV**
+```java
+DataFrame df = DataFrameReader.read("data.csv");
+
+df.toCsv("data.csv");
+```
+
+**Excel**
+```java
+DataFrame df = DataFrameReader.read("data.xlsx");
+
+df.toXlsx("data.xlsx");
 ```
 
 ### Creating column (new API)
@@ -112,20 +127,6 @@ BooleanColumn isActive = BooleanColumnBuilder.init()
         .add(false)
         .add(true)
         .addNull()
-        .build();
-```
-
-### Creating column (old API)
-Creates a column named "testColumn" containing string values.
-```java
-String[] data = {"value1", "value2", "value3"};
-
-Column column = ColumnBuilder.create()
-        .name("testColumn")
-        .type(DataType.STRING)
-        .addAll(data)
-        .add("value4")
-        .add("value5")
         .build();
 ```
 
