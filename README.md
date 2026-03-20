@@ -3,6 +3,15 @@
 > [!WARNING]
 > This library is compiled with Java 21. Running it on older JVMs is not supported.
 
+[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=jchojdak_jproxima)
+
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=jchojdak_jproxima&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=jchojdak_jproxima)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=jchojdak_jproxima&metric=bugs)](https://sonarcloud.io/summary/new_code?id=jchojdak_jproxima)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=jchojdak_jproxima&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=jchojdak_jproxima)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=jchojdak_jproxima&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=jchojdak_jproxima)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=jchojdak_jproxima&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=jchojdak_jproxima)
+
+
 ## About
 JProxima is a JVM library (Java/Kotlin/Scala and more) that provides tools for data manipulation and machine learning model building.
 The library is structured into two modules: API and implementation (impl). Developers interact only with stable API,
@@ -75,6 +84,8 @@ df.toCsv("data.csv");
 ```
 
 **Excel**
+
+*TODO: Not implemented yet.*
 ```java
 DataFrame df = DataFrameReader.read("data.xlsx");
 
