@@ -76,9 +76,11 @@ public class ExcelWriter {
     }
 
     private static void writeValue(Worksheet sheet, int r, int c, Object value) {
+        if (value == null) {
+            return;
+        }
+
         switch (value) {
-            case null -> {
-            }
             case Number n -> sheet.value(r, c, n.doubleValue());
             case Boolean b -> sheet.value(r, c, b);
             default -> sheet.value(r, c, value.toString());
