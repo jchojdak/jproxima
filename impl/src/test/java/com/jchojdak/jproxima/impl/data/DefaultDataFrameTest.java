@@ -58,6 +58,21 @@ class DefaultDataFrameTest {
     }
 
     @Test
+    void shouldReturnColumnNamesInOrder() {
+        DataFrame df = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2})
+                .addColumn("col2", new Object[]{"a", "b"})
+                .build();
+
+        List<String> names = df.getColumnNames();
+
+        assertAll(
+                () -> assertEquals(2, names.size()),
+                () -> assertEquals(List.of("col1", "col2"), names)
+        );
+    }
+
+    @Test
     void shouldAddNewColumnWithoutName() {
         DataFrame df = DataFrameBuilder.create()
                 .addColumn("col1", new Object[]{1, 2})
