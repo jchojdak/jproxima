@@ -200,8 +200,13 @@ class DefaultDataFrame implements DataFrame {
     }
 
     @Override
-    public void toExcel(String path) {
+    public void toXlsx(String path) {
         ExcelWriter.write(path, this);
+    }
+
+    @Override
+    public void toExcel(String path) {
+        toXlsx(path);
     }
 
     private int[] calculateColumnWidths(String[] columnNames, int rowsToShow) {
