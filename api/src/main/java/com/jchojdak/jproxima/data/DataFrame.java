@@ -115,5 +115,12 @@ public interface DataFrame {
      *
      * @param path path to the output file
      */
+    void toXlsx(String path);
+
+    /**
+     * Writes the DataFrame to an Excel file (.xlsx).
+     *
+     * @param path path to the output file
+     */
     void toExcel(String path);
 }
