@@ -10,7 +10,7 @@ import java.util.BitSet;
  * Memory-efficient builder for {@link IntColumn}.
  * Uses primitive int array to avoid boxing overhead.
  */
-public final class DefaultIntColumnBuilder implements IntColumnBuilder {
+public final class DefaultIntColumnBuilder extends BaseColumnBuilder implements IntColumnBuilder {
 
     private static final int INITIAL_CAPACITY = 1024;
     private static final int DEFAULT_NULL_VALUE = 0;
@@ -41,7 +41,7 @@ public final class DefaultIntColumnBuilder implements IntColumnBuilder {
 
     @Override
     public IntColumnBuilder add(int[] values) {
-        if (values == null || values.length == 0) {
+        if (isNullOrEmpty(values)) {
             return this;
         }
         ensureCapacity(size + values.length);

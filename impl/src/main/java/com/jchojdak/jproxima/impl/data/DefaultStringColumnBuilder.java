@@ -9,7 +9,7 @@ import java.util.Arrays;
  * Builder for {@link StringColumn}.
  * Nulls are handled naturally in the String array.
  */
-public final class DefaultStringColumnBuilder implements StringColumnBuilder {
+public final class DefaultStringColumnBuilder extends BaseColumnBuilder implements StringColumnBuilder {
 
     private static final int INITIAL_CAPACITY = 1024;
 
@@ -37,7 +37,7 @@ public final class DefaultStringColumnBuilder implements StringColumnBuilder {
 
     @Override
     public StringColumnBuilder add(String[] values) {
-        if (values == null || values.length == 0) {
+        if (isNullOrEmpty(values)) {
             return this;
         }
         ensureCapacity(size + values.length);
