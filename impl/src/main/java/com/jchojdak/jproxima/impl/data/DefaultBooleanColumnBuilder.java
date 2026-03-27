@@ -10,7 +10,7 @@ import java.util.BitSet;
  * Memory-efficient builder for {@link BooleanColumn}.
  * Uses primitive boolean array.
  */
-public final class DefaultBooleanColumnBuilder implements BooleanColumnBuilder {
+public final class DefaultBooleanColumnBuilder extends BaseColumnBuilder implements BooleanColumnBuilder {
 
     private static final int INITIAL_CAPACITY = 10;
     private static final boolean DEFAULT_NULL_VALUE = false;
@@ -41,7 +41,7 @@ public final class DefaultBooleanColumnBuilder implements BooleanColumnBuilder {
 
     @Override
     public BooleanColumnBuilder add(boolean[] values) {
-        if (values == null || values.length == 0) {
+        if (isNullOrEmpty(values)) {
             return this;
         }
         ensureCapacity(size + values.length);

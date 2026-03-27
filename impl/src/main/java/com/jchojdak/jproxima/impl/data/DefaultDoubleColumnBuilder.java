@@ -10,7 +10,7 @@ import java.util.BitSet;
  * Memory-efficient builder for {@link DoubleColumn}.
  * Uses primitive double array to avoid boxing overhead.
  */
-public final class DefaultDoubleColumnBuilder implements DoubleColumnBuilder {
+public final class DefaultDoubleColumnBuilder extends BaseColumnBuilder implements DoubleColumnBuilder {
 
     private static final int INITIAL_CAPACITY = 1024;
     private static final double DEFAULT_NULL_VALUE = 0.0;
@@ -41,7 +41,7 @@ public final class DefaultDoubleColumnBuilder implements DoubleColumnBuilder {
 
     @Override
     public DoubleColumnBuilder add(double[] values) {
-        if (values == null || values.length == 0) {
+        if (isNullOrEmpty(values)) {
             return this;
         }
         ensureCapacity(size + values.length);
