@@ -2,6 +2,7 @@ package com.jchojdak.jproxima.impl.io;
 
 import com.jchojdak.jproxima.data.DataFrame;
 import com.jchojdak.jproxima.impl.io.csv.DefaultCsvReaderBuilder;
+import com.jchojdak.jproxima.impl.io.excel.DefaultExcelReaderBuilder;
 import com.jchojdak.jproxima.io.read.CsvReaderBuilder;
 import com.jchojdak.jproxima.io.read.ExcelReaderBuilder;
 import com.jchojdak.jproxima.io.spi.DataFrameReaderFactory;
@@ -34,8 +35,6 @@ public final class DefaultDataFrameReaderFactory implements DataFrameReaderFacto
 
     @Override
     public ExcelReaderBuilder createExcelReader(Path path) {
-        // TODO: implement
-        //return new DefaultExcelReaderBuilder(path);
-        throw new UnsupportedOperationException("Excel reader not implemented yet");
+        return new DefaultExcelReaderBuilder(path);
     }
 }
