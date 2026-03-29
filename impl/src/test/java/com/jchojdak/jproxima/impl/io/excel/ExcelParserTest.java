@@ -50,7 +50,7 @@ class ExcelParserTest {
 
         ExcelParser parser = new ExcelParser(path, config);
 
-        RuntimeException exception = assertThrows(RuntimeException.class, parser::parse);
+        var exception = assertThrows(ExcelReadException.class, parser::parse);
 
         assertTrue(exception.getMessage().contains("Failed to read Excel file"));
     }

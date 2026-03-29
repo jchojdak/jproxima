@@ -56,7 +56,7 @@ final class ExcelParser {
             }
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to read Excel file: " + path, e);
+            throw new ExcelReadException("Failed to read Excel file: " + path, e);
         }
     }
 
