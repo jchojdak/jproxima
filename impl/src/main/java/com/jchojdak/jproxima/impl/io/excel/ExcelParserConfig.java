@@ -29,16 +29,19 @@ record ExcelParserConfig(
         private String sheetName = DEFAULT_SHEET_NAME;
         private boolean hasHeader = DEFAULT_HAS_HEADER;
 
-        void sheetIndex(int sheetIndex) {
+        Builder sheetIndex(int sheetIndex) {
             this.sheetIndex = sheetIndex;
+            return this;
         }
 
-        void sheetName(String sheetName) {
+        Builder sheetName(String sheetName) {
             this.sheetName = sheetName;
+            return this;
         }
 
-        void hasHeader(boolean hasHeader) {
+        Builder hasHeader(boolean hasHeader) {
             this.hasHeader = hasHeader;
+            return this;
         }
 
         ExcelParserConfig build() {
