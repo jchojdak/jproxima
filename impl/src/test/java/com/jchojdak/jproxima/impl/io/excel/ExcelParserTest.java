@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ExcelParserTest {
 
+    @SuppressWarnings("SameParameterValue")
     private Path getExcelPath(String fileName) throws URISyntaxException {
         return Paths.get(
                 Objects.requireNonNull(getClass().getClassLoader().getResource("excel/" + fileName)).toURI()
