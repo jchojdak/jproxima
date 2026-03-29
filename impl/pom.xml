@@ -29,5 +29,9 @@
             <groupId>org.dhatim</groupId>
             <artifactId>fastexcel</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.dhatim</groupId>
+            <artifactId>fastexcel-reader</artifactId>
+        </dependency>
     </dependencies>
 </project>
