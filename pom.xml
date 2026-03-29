@@ -88,6 +88,11 @@
                 <artifactId>fastexcel</artifactId>
                 <version>${fastexcel.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.dhatim</groupId>
+                <artifactId>fastexcel-reader</artifactId>
+                <version>${fastexcel.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
