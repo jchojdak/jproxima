@@ -81,10 +81,11 @@ class CsvWriterTest {
     @Test
     void shouldThrowExceptionWhenPathIsInvalid() {
         Path invalidPath = Path.of("/this/path/does/not/exist/test.csv");
+        List<Column> columns = generateColumns();
 
         Exception exception = assertThrows(
                 CsvWriteException.class,
-                () -> CsvWriter.write(invalidPath, generateColumns())
+                () -> CsvWriter.write(invalidPath, columns)
         );
 
         assertTrue(exception.getMessage().contains("Error writing CSV file"));
