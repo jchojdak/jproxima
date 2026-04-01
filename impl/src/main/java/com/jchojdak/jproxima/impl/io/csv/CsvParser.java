@@ -83,15 +83,11 @@ final class CsvParser {
 
         DataFrameBuilder builder = DataFrameBuilder.create();
 
-        int rowCount = 0;
-
         addRow(firstRow, columnCount, buffers, columnTypes);
-        rowCount++;
 
         while (rows.hasNext()) {
             CSVRecord row = rows.next();
             addRow(row, columnCount, buffers, columnTypes);
-            rowCount++;
         }
 
         flushBuffers(builder, columnNames, columnTypes, buffers);
