@@ -23,8 +23,8 @@ without changing end-user code.
 ## Features
 
 - **Immutable data structures**: Thread-safe DataFrame and Column data structures
-- **File I/O**: Read/write CSV and Excel (.xlsx) files
-- **Fluent API**: Builder pattern for intuitive data manipulation
+- **File I/O**: Read and write CSV (.csv) and Excel (.xlsx) files
+- **Fluent API**: Intuitive data manipulation
 - **Type-safe**: Automatic type inference and strong type safety via DataType
 
 ## Installation
