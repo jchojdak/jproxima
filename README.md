@@ -55,8 +55,8 @@ For example, using Maven:
 ### End-to-end example
 
 ```java
-import com.jproxima.api.dataframe.*;
-import com.jproxima.api.column.*;
+import com.jchojdak.jproxima.data.*;
+import com.jchojdak.jproxima.io.DataFrameReader;
 
 public class Example {
     public static void main(String[] args) {
@@ -67,50 +67,33 @@ public class Example {
                 .header(true)
                 .build();
 
-        // 2. Create additional columns
-        StringColumn names = StringColumnBuilder.init()
-                .name("name")
-                .add("Alice", "Bob", "Charlie")
-                .build();
+        // 2. Select and manipulate data
+        DataFrame selected = df.getColumns("name", "age");
+        DataFrame withoutAge = df.dropColumn("age");
 
-        IntColumn ages = IntColumnBuilder.init()
-                .name("age")
-                .add(25, 30, 35)
-                .build();
-
-        BooleanColumn active = BooleanColumnBuilder.init()
-                .name("active")
-                .add(true, false, true)
-                .build();
-
-        // 3. Build new DataFrame
-        DataFrame newDf = DataFrameBuilder.create()
-                .addColumn(names)
-                .addColumn(ages)
-                .addColumn(active)
-                .build();
-
-        // 4. Select and manipulate data
-        DataFrame selected = newDf.getColumns("name", "age");
-        DataFrame withoutAge = newDf.dropColumn("age");
-
-        // 5. Preview data
+        // 3. Preview data
         System.out.println(selected.head(2)); // first 2 rows
         System.out.println(selected.tail(2)); // last 2 rows
 
-        // 6. Access values
-        Column nameColumn = newDf.getColumn("name");
-        Object firstName = nameColumn.get(0);
-        int size = nameColumn.size();
+        System.out.println(withoutAge.head(2)); // first 2 rows
 
+        // 4. Access values
+        String firstName = df
+                .getColumn("name")
+                .get(0)
+                .toString();
+
+        int size = df
+                .getColumn("name")
+                .size();
+
+        // 5. Print values
         System.out.println("First name: " + firstName);
         System.out.println("Column size: " + size);
 
-        // 7. Convert to array
-        Object[][] array = newDf.toArray();
-
-        // 8. Save results
+        // 6. Save results
         selected.toCsv("output.csv");
         selected.toXlsx("output.xlsx");
     }
 }
+```
