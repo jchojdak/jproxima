@@ -1,5 +1,7 @@
 package com.jchojdak.jproxima.data;
 
+import java.util.List;
+
 /**
  * Represents a 2-dimensional table of data.
  * <p>
@@ -29,6 +31,13 @@ public interface DataFrame {
      * @return column
      */
     Column getColumn(String name);
+
+    /**
+     * Returns an ordered list of column names.
+     *
+     * @return list of column names in insertion order
+     */
+    List<String> getColumnNames();
 
     /**
      * Returns a new DataFrame with only the selected columns.
@@ -93,4 +102,25 @@ public interface DataFrame {
      * @return string representation of the DataFrame
      */
     String toString(int displayLimit);
+
+    /**
+     * Writes the DataFrame to a CSV file.
+     *
+     * @param path path to the output file
+     */
+    void toCsv(String path);
+
+    /**
+     * Writes the DataFrame to an Excel file (.xlsx).
+     *
+     * @param path path to the output file
+     */
+    void toXlsx(String path);
+
+    /**
+     * Writes the DataFrame to an Excel file (.xlsx).
+     *
+     * @param path path to the output file
+     */
+    void toExcel(String path);
 }

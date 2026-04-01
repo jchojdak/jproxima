@@ -6,7 +6,7 @@
 
     <groupId>com.jchojdak</groupId>
     <artifactId>jproxima-root</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <packaging>pom</packaging>
 
     <name>JProxima Root</name>
@@ -51,6 +51,7 @@
 
         <junit.version>5.10.1</junit.version>
         <commons-csv.version>1.14.1</commons-csv.version>
+        <fastexcel.version>0.20.0</fastexcel.version>
     </properties>
 
     <modules>
@@ -81,6 +82,16 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-csv</artifactId>
                 <version>${commons-csv.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.dhatim</groupId>
+                <artifactId>fastexcel</artifactId>
+                <version>${fastexcel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.dhatim</groupId>
+                <artifactId>fastexcel-reader</artifactId>
+                <version>${fastexcel.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

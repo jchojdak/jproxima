@@ -17,6 +17,26 @@ class TypeInferrerTest {
     @ParameterizedTest
     @CsvSource(
             value = {
+                    "1,INTEGER",
+                    "123,INTEGER",
+                    "1.11,DOUBLE",
+                    "true,BOOLEAN",
+                    "false,BOOLEAN",
+                    "string,STRING",
+                    "'',STRING",
+                    "NULL,STRING"
+            },
+            nullValues = "NULL"
+    )
+    void shouldInferCorrectTypeFromSingleValue(String value, String expectedType) {
+        DataType expected = DataType.valueOf(expectedType);
+
+        assertEquals(expected, inferrer.inferType(value));
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+            value = {
                     "1,2,3,INTEGER",
                     "1.11,2.22,3.33,DOUBLE",
                     "true,false,true,BOOLEAN",

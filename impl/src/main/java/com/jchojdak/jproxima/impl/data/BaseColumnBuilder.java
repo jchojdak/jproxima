@@ -1,0 +1,24 @@
+package com.jchojdak.jproxima.impl.data;
+
+/**
+ * Base logic for column builders.
+ */
+abstract sealed class BaseColumnBuilder
+        permits DefaultIntColumnBuilder, DefaultDoubleColumnBuilder, DefaultBooleanColumnBuilder, DefaultStringColumnBuilder {
+
+    protected boolean isNullOrEmpty(boolean[] values) {
+        return values == null || values.length == 0;
+    }
+
+    protected boolean isNullOrEmpty(int[] values) {
+        return values == null || values.length == 0;
+    }
+
+    protected boolean isNullOrEmpty(double[] values) {
+        return values == null || values.length == 0;
+    }
+
+    protected boolean isNullOrEmpty(String[] values) {
+        return values == null || values.length == 0;
+    }
+}

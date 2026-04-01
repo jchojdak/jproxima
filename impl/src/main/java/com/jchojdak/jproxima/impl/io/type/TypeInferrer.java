@@ -16,6 +16,17 @@ public final class TypeInferrer {
     }
 
     /**
+     * Infers the data type from a string value.
+     */
+    public DataType inferType(String value) {
+        if (isNull(value)) return DataType.STRING;
+        if (isInteger(value)) return DataType.INTEGER;
+        if (isDouble(value)) return DataType.DOUBLE;
+        if (isBoolean(value)) return DataType.BOOLEAN;
+        return DataType.STRING;
+    }
+
+    /**
      * Infers the data type from a list of string values.
      * Returns the first detected type or STRING if all values are null.
      */

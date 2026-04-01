@@ -2,9 +2,10 @@ package com.jchojdak.jproxima.impl.data;
 
 import com.jchojdak.jproxima.data.Column;
 import com.jchojdak.jproxima.data.DataFrame;
+import com.jchojdak.jproxima.impl.io.csv.CsvWriter;
+import com.jchojdak.jproxima.impl.io.excel.ExcelWriter;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Default implementation of {@link DataFrame}
@@ -37,6 +38,11 @@ class DefaultDataFrame implements DataFrame {
     @Override
     public Column getColumn(String name) {
         return columns.get(name);
+    }
+
+    @Override
+    public List<String> getColumnNames() {
+        return new ArrayList<>(columns.keySet());
     }
 
     @Override
@@ -186,6 +192,21 @@ class DefaultDataFrame implements DataFrame {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public void toCsv(String path) {
+        CsvWriter.write(path, columns.values());
+    }
+
+    @Override
+    public void toXlsx(String path) {
+        ExcelWriter.write(path, this);
+    }
+
+    @Override
+    public void toExcel(String path) {
+        toXlsx(path);
     }
 
     private int[] calculateColumnWidths(String[] columnNames, int rowsToShow) {

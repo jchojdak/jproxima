@@ -3,6 +3,8 @@ package com.jchojdak.jproxima.impl.data;
 import com.jchojdak.jproxima.data.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class DefaultDataFrameTest {
@@ -53,15 +55,29 @@ class DefaultDataFrameTest {
     }
 
     @Test
+    void shouldReturnColumnNamesInOrder() {
+        DataFrame df = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2})
+                .addColumn("col2", new Object[]{"a", "b"})
+                .build();
+
+        List<String> names = df.getColumnNames();
+
+        assertAll(
+                () -> assertEquals(2, names.size()),
+                () -> assertEquals(List.of("col1", "col2"), names)
+        );
+    }
+
+    @Test
     void shouldAddNewColumnWithoutName() {
         DataFrame df = DataFrameBuilder.create()
                 .addColumn("col1", new Object[]{1, 2})
                 .build();
 
-        Column newColumn = ColumnBuilder.create()
+        Column newColumn = StringColumnBuilder.init()
                 .name("col2")
-                .type(DataType.STRING)
-                .addAll(new Object[]{"a", "b"})
+                .add(new String[]{"a", "b"})
                 .build();
 
         DataFrame result = df.addColumn(newColumn);
@@ -78,10 +94,9 @@ class DefaultDataFrameTest {
                 .addColumn("col1", new Object[]{1, 2})
                 .build();
 
-        Column newColumn = ColumnBuilder.create()
+        Column newColumn = StringColumnBuilder.init()
                 .name(name)
-                .type(DataType.STRING)
-                .addAll(new Object[]{"a", "b"})
+                .add(new String[]{"a", "b"})
                 .build();
 
         DataFrame result = df.addColumn(name, newColumn);

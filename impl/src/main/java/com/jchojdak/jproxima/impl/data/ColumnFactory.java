@@ -7,6 +7,8 @@ import com.jchojdak.jproxima.data.*;
  */
 final class ColumnFactory {
 
+    private ColumnFactory() {}
+
     static Column create(String name, Object[] data, DataType type) {
         return switch (type) {
             case INTEGER -> new DefaultIntColumn(name, data);

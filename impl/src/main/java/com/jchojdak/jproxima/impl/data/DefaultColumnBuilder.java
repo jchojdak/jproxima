@@ -1,8 +1,6 @@
 package com.jchojdak.jproxima.impl.data;
 
-import com.jchojdak.jproxima.data.Column;
-import com.jchojdak.jproxima.data.ColumnBuilder;
-import com.jchojdak.jproxima.data.DataType;
+import com.jchojdak.jproxima.data.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +9,14 @@ import java.util.List;
 /**
  * Default implementation of {@link ColumnBuilder}
  *
+ * @deprecated Use type-specific builders ({@link IntColumnBuilder}, {@link DoubleColumnBuilder},
+ *             {@link BooleanColumnBuilder}, {@link StringColumnBuilder}) for zero-boxing performance
+ *             and better memory efficiency.
  * @see ColumnBuilder
+ * @see IntColumnBuilder
+ * @see DoubleColumnBuilder
+ * @see BooleanColumnBuilder
+ * @see StringColumnBuilder
  */
 @Deprecated(since = "0.2.0", forRemoval = true)
 @SuppressWarnings({"removal", "deprecation"})
