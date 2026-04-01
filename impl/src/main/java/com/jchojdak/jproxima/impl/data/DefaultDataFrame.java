@@ -223,7 +223,12 @@ class DefaultDataFrame implements DataFrame {
 
     private void appendRow(StringBuilder sb, String[] values, int[] widths) {
         for (int i = 0; i < values.length; i++) {
-            sb.append(String.format("%-" + widths[i] + "s", values[i]));
+            String value = values[i];
+            sb.append(value);
+
+            int spacesToAdd = widths[i] - value.length();
+            sb.repeat(" ", Math.max(0, spacesToAdd));
+
             if (i < values.length - 1) {
                 sb.append("  ");
             }
