@@ -42,7 +42,7 @@ final class CsvParser {
                 return parseDirectly(format);
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to read CSV file: " + path, e);
+            throw new CsvReadException("Failed to read CSV file: " + path, e);
         }
     }
 
