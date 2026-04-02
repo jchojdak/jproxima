@@ -47,7 +47,12 @@
         <compiler.plugin.version>3.14.1</compiler.plugin.version>
         <javadoc.plugin.version>3.12.0</javadoc.plugin.version>
         <gpg.plugin.version>3.2.8</gpg.plugin.version>
+        <jacoco.plugin.version>0.8.14</jacoco.plugin.version>
         <central.publishing.plugin.version>0.10.0</central.publishing.plugin.version>
+
+        <sonar.organization>jchojdak</sonar.organization>
+        <sonar.projectKey>jchojdak_jproxima</sonar.projectKey>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
         <junit.version>5.10.1</junit.version>
         <commons-csv.version>1.14.1</commons-csv.version>
@@ -105,6 +110,31 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco.plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>prepare-agent</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>report</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
