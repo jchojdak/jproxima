@@ -1,4 +1,5 @@
-name: SonarQube
+name: SonarQube Analysis
+
 on:
   push:
     branches:
@@ -7,6 +8,7 @@ on:
       - release/**
       - fix/**
       - refactor/**
+
   pull_request:
     branches:
       - master
