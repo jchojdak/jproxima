@@ -1,9 +1,17 @@
 name: SonarQube
 on:
-  workflow_run:
-    workflows: [ "CI Unit tests" ]
-    types:
-      - completed
+  push:
+    branches:
+      - master
+      - feature/**
+      - release/**
+      - fix/**
+      - refactor/**
+  pull_request:
+    branches:
+      - master
+      - feature/**
+      - release/**
 
 jobs:
   build:
