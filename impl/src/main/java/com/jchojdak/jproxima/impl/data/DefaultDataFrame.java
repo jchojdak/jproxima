@@ -211,7 +211,14 @@ class DefaultDataFrame implements DataFrame {
     }
 
     @Override
-    public DataFrame join(DataFrame other, JoinType type, List<String> leftKeys, List<String> rightKeys, String leftSuffix, String rightSuffix) {
+    public DataFrame join(
+            DataFrame other,
+            JoinType type,
+            List<String> leftKeys,
+            List<String> rightKeys,
+            String leftSuffix,
+            String rightSuffix
+    ) {
         return DataFrameJoiner.join(
                 this,
                 other,
