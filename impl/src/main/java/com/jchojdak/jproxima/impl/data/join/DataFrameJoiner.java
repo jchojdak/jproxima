@@ -3,13 +3,13 @@ package com.jchojdak.jproxima.impl.data.join;
 import com.jchojdak.jproxima.data.DataFrame;
 import com.jchojdak.jproxima.data.join.JoinType;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
 public final class DataFrameJoiner {
 
-    private static final Map<JoinType, JoinStrategy> STRATEGIES = new HashMap<>();
+    private static final Map<JoinType, JoinStrategy> STRATEGIES = new EnumMap<>(JoinType.class);
 
     static {
         register(JoinType.INNER, new InnerJoin());
@@ -34,8 +34,9 @@ public final class DataFrameJoiner {
             String leftSuffix,
             String rightSuffix
     ) {
-        JoinStrategy strategy = STRATEGIES.get(type);
+        validateKeys(leftKeys, rightKeys);
 
+        JoinStrategy strategy = STRATEGIES.get(type);
         if (strategy == null) {
             throw new IllegalArgumentException("Unsupported join type: " + type);
         }
@@ -48,5 +49,18 @@ public final class DataFrameJoiner {
                 leftSuffix,
                 rightSuffix
         );
+    }
+
+    private static void validateKeys(List<String> leftKeys, List<String> rightKeys) {
+        if (leftKeys.isEmpty() || rightKeys.isEmpty()) {
+            throw new IllegalArgumentException("Join keys must not be empty");
+        }
+
+        if (leftKeys.size() != rightKeys.size()) {
+            throw new IllegalArgumentException(
+                    "Left and right key lists must have the same size, got: "
+                            + leftKeys.size() + " vs " + rightKeys.size()
+            );
+        }
     }
 }
