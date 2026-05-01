@@ -1,18 +1,28 @@
 package com.jchojdak.jproxima.impl.data.join;
 
 import com.jchojdak.jproxima.data.DataFrame;
-import com.jchojdak.jproxima.data.JoinType;
+import com.jchojdak.jproxima.data.join.JoinType;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class DataFrameJoiner {
 
-    private static final JoinStrategy INNER = new InnerJoin();
-    private static final JoinStrategy LEFT  = new LeftJoin();
-    private static final JoinStrategy RIGHT = new RightJoin();
-    private static final JoinStrategy FULL  = new FullJoin();
+    private static final Map<JoinType, JoinStrategy> STRATEGIES = new HashMap<>();
+
+    static {
+        register(JoinType.INNER, new InnerJoin());
+        register(JoinType.LEFT, new LeftJoin());
+        register(JoinType.RIGHT, new RightJoin());
+        register(JoinType.FULL, new FullJoin());
+    }
 
     private DataFrameJoiner() {
+    }
+
+    static void register(JoinType type, JoinStrategy strategy) {
+        STRATEGIES.put(type, strategy);
     }
 
     public static DataFrame join(
@@ -24,12 +34,11 @@ public final class DataFrameJoiner {
             String leftSuffix,
             String rightSuffix
     ) {
-        JoinStrategy strategy = switch (type) {
-            case INNER -> INNER;
-            case LEFT -> LEFT;
-            case RIGHT -> RIGHT;
-            case FULL -> FULL;
-        };
+        JoinStrategy strategy = STRATEGIES.get(type);
+
+        if (strategy == null) {
+            throw new IllegalArgumentException("Unsupported join type: " + type);
+        }
 
         return strategy.join(
                 left,
