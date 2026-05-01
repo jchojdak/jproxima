@@ -1,4 +1,4 @@
-package com.jchojdak.jproxima.data;
+package com.jchojdak.jproxima.data.join;
 
 /**
  * Defines the type of join operation for combining two DataFrames.

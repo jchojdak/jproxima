@@ -1,5 +1,7 @@
 package com.jchojdak.jproxima.data;
 
+import com.jchojdak.jproxima.data.join.JoinType;
+
 import java.util.List;
 
 /**

@@ -2,7 +2,7 @@ package com.jchojdak.jproxima.impl.data;
 
 import com.jchojdak.jproxima.data.Column;
 import com.jchojdak.jproxima.data.DataFrame;
-import com.jchojdak.jproxima.data.JoinType;
+import com.jchojdak.jproxima.data.join.JoinType;
 import com.jchojdak.jproxima.impl.data.join.DataFrameJoiner;
 import com.jchojdak.jproxima.impl.io.csv.CsvWriter;
 import com.jchojdak.jproxima.impl.io.excel.ExcelWriter;
