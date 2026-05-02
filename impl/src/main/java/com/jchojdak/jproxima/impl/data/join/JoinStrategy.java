@@ -4,7 +4,7 @@ import com.jchojdak.jproxima.data.DataFrame;
 
 import java.util.List;
 
-interface JoinStrategy {
+public interface JoinStrategy {
 
     DataFrame join(
             DataFrame left,
