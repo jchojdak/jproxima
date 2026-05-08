@@ -112,8 +112,13 @@ class DataFrameJoinerTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> DataFrameJoiner.join(
-                        left, right, JoinType.INNER,
-                        List.of("id"), List.of("id"), "_x", "_y"
+                        left,
+                        right,
+                        JoinType.INNER,
+                        List.of("id"),
+                        List.of("id"),
+                        "_x",
+                        "_y"
                 )
         );
     }
