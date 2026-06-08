@@ -4,7 +4,11 @@ import com.jchojdak.jproxima.data.DataFrame;
 
 import java.util.List;
 
-final class RightJoin implements JoinStrategy {
+/**
+ * Right join implementation for DataFrames.
+ * Implemented by delegating to reversed left join.
+ */
+final class RightJoin extends BaseJoin {
 
     @Override
     public DataFrame join(
@@ -15,7 +19,13 @@ final class RightJoin implements JoinStrategy {
             String leftSuffix,
             String rightSuffix
     ) {
-
-        return null;
+        return new LeftJoin().join(
+                right,
+                left,
+                rightKeys,
+                leftKeys,
+                rightSuffix,
+                leftSuffix
+        );
     }
 }

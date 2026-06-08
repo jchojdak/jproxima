@@ -1,10 +1,14 @@
 package com.jchojdak.jproxima.impl.data.join;
 
-import com.jchojdak.jproxima.data.DataFrame;
+import com.jchojdak.jproxima.data.*;
 
-import java.util.List;
+import java.util.*;
 
-final class InnerJoin implements JoinStrategy {
+/**
+ * Inner join implementation for DataFrames.
+ * Returns only matching rows from both sides.
+ */
+final class InnerJoin extends BaseJoin {
 
     @Override
     public DataFrame join(
@@ -15,7 +19,19 @@ final class InnerJoin implements JoinStrategy {
             String leftSuffix,
             String rightSuffix
     ) {
+        JoinResultHolder holder = new JoinResultHolder(left, right, rightSuffix);
 
-        return null;
+        int leftRows = left.getColumn(left.getColumnNames().getFirst()).size();
+        int rightRows = right.getColumn(right.getColumnNames().getFirst()).size();
+
+        for (int i = 0; i < leftRows; i++) {
+            for (int j = 0; j < rightRows; j++) {
+                if (matches(left, i, right, j, leftKeys, rightKeys)) {
+                    holder.addRow(left, i, right, j);
+                }
+            }
+        }
+
+        return holder.build();
     }
 }

@@ -7,6 +7,10 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Entry point for performing JOIN operations on DataFrames.
+ * Delegates execution to a specific JoinStrategy implementation.
+ */
 public final class DataFrameJoiner {
 
     private static final Map<JoinType, JoinStrategy> STRATEGIES = new EnumMap<>(JoinType.class);
@@ -51,6 +55,9 @@ public final class DataFrameJoiner {
         );
     }
 
+    /**
+     * Validates join key lists.
+     */
     private static void validateKeys(List<String> leftKeys, List<String> rightKeys) {
         if (leftKeys.isEmpty() || rightKeys.isEmpty()) {
             throw new IllegalArgumentException("Join keys must not be empty");
