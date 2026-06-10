@@ -61,4 +61,17 @@ public interface Column {
      * @return string representation of the column
      */
     String toString(int displayLimit);
+
+    /**
+     * Returns statistics for this column if it is numeric.
+     *
+     * <p>
+     * Only numeric column implementations support this operation.
+     *
+     * @return column statistics
+     * @throws UnsupportedOperationException if column is not numeric
+     */
+    default ColumnStats stats() {
+        throw new UnsupportedOperationException("Stats supported only for numeric columns");
+    }
 }
