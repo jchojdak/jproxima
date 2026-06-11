@@ -75,10 +75,18 @@ final class DefaultDoubleColumn extends BaseColumn implements DoubleColumn {
     @Override
     public ColumnStats stats() {
         ColumnStats s = stats;
+
         if (s == null) {
-            s = new DoubleColumnStats(this);
-            stats = s;
+            synchronized (this) {
+                s = stats;
+
+                if (s == null) {
+                    s = new DoubleColumnStats(this);
+                    stats = s;
+                }
+            }
         }
+
         return s;
     }
 }

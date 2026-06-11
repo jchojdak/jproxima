@@ -75,10 +75,18 @@ final class DefaultIntColumn extends BaseColumn implements IntColumn {
     @Override
     public ColumnStats stats() {
         ColumnStats s = stats;
+
         if (s == null) {
-            s = new IntColumnStats(this);
-            stats = s;
+            synchronized (this) {
+                s = stats;
+
+                if (s == null) {
+                    s = new IntColumnStats(this);
+                    stats = s;
+                }
+            }
         }
+
         return s;
     }
 }
