@@ -1,7 +1,7 @@
 package com.jchojdak.jproxima.impl.data;
 
 import com.jchojdak.jproxima.data.*;
-import com.jchojdak.jproxima.data.join.JoinType;
+import com.jchojdak.jproxima.data.JoinType;
 import com.jchojdak.jproxima.impl.data.join.DataFrameJoiner;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
