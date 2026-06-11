@@ -7,6 +7,7 @@ import com.jchojdak.jproxima.impl.data.stats.IntColumnStats;
 
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Default implementation of {@link IntColumn}.
@@ -16,7 +17,7 @@ final class DefaultIntColumn extends BaseColumn implements IntColumn {
     private static final int DEFAULT_NULL_VALUE = 0;
 
     private final int[] data;
-    private volatile ColumnStats stats;
+    private final AtomicReference<ColumnStats> stats = new AtomicReference<>();
 
     DefaultIntColumn(String name, int[] data, BitSet nullMask) {
         super(name, DataType.INTEGER, data.length);
@@ -74,17 +75,12 @@ final class DefaultIntColumn extends BaseColumn implements IntColumn {
 
     @Override
     public ColumnStats stats() {
-        ColumnStats s = stats;
+        ColumnStats s = stats.get();
 
         if (s == null) {
-            synchronized (this) {
-                s = stats;
-
-                if (s == null) {
-                    s = new IntColumnStats(this);
-                    stats = s;
-                }
-            }
+            ColumnStats computed = new IntColumnStats(this);
+            stats.compareAndSet(null, computed);
+            s = stats.get();
         }
 
         return s;
