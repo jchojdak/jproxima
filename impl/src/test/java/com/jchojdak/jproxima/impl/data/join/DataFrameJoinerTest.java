@@ -31,14 +31,17 @@ class DataFrameJoinerTest {
 
     @Test
     void shouldThrowWhenLeftKeysEmpty() {
+        List<String> leftKeys = List.of();
+        List<String> rightKeys = List.of("id");
+
         assertThrows(
                 IllegalArgumentException.class,
                 () -> DataFrameJoiner.join(
                         left,
                         right,
                         JoinType.INNER,
-                        List.of(),
-                        List.of("id"),
+                        leftKeys,
+                        rightKeys,
                         "_x",
                         "_y"
                 )
@@ -47,14 +50,17 @@ class DataFrameJoinerTest {
 
     @Test
     void shouldThrowWhenRightKeysEmpty() {
+        List<String> leftKeys = List.of("id");
+        List<String> rightKeys = List.of();
+
         assertThrows(
                 IllegalArgumentException.class,
                 () -> DataFrameJoiner.join(
                         left,
                         right,
                         JoinType.INNER,
-                        List.of("id"),
-                        List.of(),
+                        leftKeys,
+                        rightKeys,
                         "_x",
                         "_y"
                 )
@@ -63,14 +69,17 @@ class DataFrameJoinerTest {
 
     @Test
     void shouldThrowWhenKeySizesDiffer() {
+        List<String> leftKeys = List.of("id");
+        List<String> rightKeys = List.of("id", "title");
+
         assertThrows(
                 IllegalArgumentException.class,
                 () -> DataFrameJoiner.join(
                         left,
                         right,
                         JoinType.INNER,
-                        List.of("id"),
-                        List.of("id", "title"),
+                        leftKeys,
+                        rightKeys,
                         "_x",
                         "_y"
                 )
@@ -109,14 +118,16 @@ class DataFrameJoinerTest {
     void shouldThrowWhenStrategyNotRegistered() {
         DataFrameJoiner.register(JoinType.INNER, null);
 
+        List<String> keys = List.of("id");
+
         assertThrows(
                 IllegalArgumentException.class,
                 () -> DataFrameJoiner.join(
                         left,
                         right,
                         JoinType.INNER,
-                        List.of("id"),
-                        List.of("id"),
+                        keys,
+                        keys,
                         "_x",
                         "_y"
                 )
