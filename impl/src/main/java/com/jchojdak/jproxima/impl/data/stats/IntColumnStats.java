@@ -1,14 +1,23 @@
 package com.jchojdak.jproxima.impl.data.stats;
 
-import com.jchojdak.jproxima.data.ColumnStats;
 import com.jchojdak.jproxima.data.IntColumn;
 
-public final class IntColumnStats implements ColumnStats {
+public final class IntColumnStats extends BaseColumnStats {
 
     private final IntColumn column;
 
     public IntColumnStats(IntColumn column) {
         this.column = column;
+    }
+
+    @Override
+    protected int size() {
+        return column.size();
+    }
+
+    @Override
+    protected boolean isNullAt(int i) {
+        return column.isNull(i);
     }
 
     @Override
@@ -79,21 +88,5 @@ public final class IntColumnStats implements ColumnStats {
         }
 
         return sum;
-    }
-
-    @Override
-    public long count() {
-        long c = 0;
-
-        for (int i = 0; i < column.size(); i++) {
-            if (!column.isNull(i)) c++;
-        }
-
-        return c;
-    }
-
-    @Override
-    public long nullCount() {
-        return column.size() - count();
     }
 }
