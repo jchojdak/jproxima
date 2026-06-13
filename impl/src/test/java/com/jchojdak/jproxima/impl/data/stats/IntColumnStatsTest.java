@@ -5,6 +5,8 @@ import com.jchojdak.jproxima.data.IntColumn;
 import com.jchojdak.jproxima.data.IntColumnBuilder;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.CountDownLatch;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -127,5 +129,47 @@ class IntColumnStatsTest {
         ColumnStats stats = new IntColumnStats(column);
 
         assertThrows(IllegalStateException.class, stats::avg);
+    }
+
+    @Test
+    void shouldReturnConsistentResultsUnderConcurrentAccess() throws InterruptedException {
+        IntColumn column = IntColumnBuilder.init()
+                .name("numbers")
+                .add(new int[]{5, 2, 9, 1, 7})
+                .build();
+
+        ColumnStats stats = new IntColumnStats(column);
+
+        int threadCount = 20;
+        CountDownLatch ready = new CountDownLatch(threadCount);
+        CountDownLatch start = new CountDownLatch(1);
+        CountDownLatch done = new CountDownLatch(threadCount);
+
+        double[] minResults = new double[threadCount];
+        double[] maxResults = new double[threadCount];
+
+        for (int i = 0; i < threadCount; i++) {
+            final int idx = i;
+            new Thread(() -> {
+                ready.countDown();
+                try {
+                    start.await();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                minResults[idx] = stats.min();
+                maxResults[idx] = stats.max();
+                done.countDown();
+            }).start();
+        }
+
+        ready.await();
+        start.countDown();
+        done.await();
+
+        for (int i = 0; i < threadCount; i++) {
+            assertEquals(1.0, minResults[i], "min mismatch at thread " + i);
+            assertEquals(9.0, maxResults[i], "max mismatch at thread " + i);
+        }
     }
 }
