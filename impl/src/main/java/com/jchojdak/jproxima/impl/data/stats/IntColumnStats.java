@@ -6,6 +6,11 @@ public final class IntColumnStats extends BaseColumnStats {
 
     private final IntColumn column;
 
+    private boolean aggregatesComputed = false;
+    private int cachedMin;
+    private int cachedMax;
+    private long cachedSum;
+
     public IntColumnStats(IntColumn column) {
         this.column = column;
     }
@@ -20,73 +25,57 @@ public final class IntColumnStats extends BaseColumnStats {
         return column.isNull(i);
     }
 
+    private synchronized void computeAggregates() {
+        if (aggregatesComputed) return;
+
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        long sum = 0;
+
+        int n = column.size();
+        for (int i = 0; i < n; i++) {
+            if (column.isNull(i)) continue;
+            int v = column.getInt(i);
+
+            if (v < min) min = v;
+            if (v > max) max = v;
+            sum += v;
+        }
+
+        cachedMin = min;
+        cachedMax = max;
+        cachedSum = sum;
+        aggregatesComputed = true;
+    }
+
     @Override
     public double min() {
-        int min = Integer.MAX_VALUE;
-        boolean found = false;
-
-        for (int i = 0; i < column.size(); i++) {
-            if (column.isNull(i)) continue;
-
-            min = Math.min(min, column.getInt(i));
-            found = true;
-        }
-
-        if (!found) {
+        computeAggregates();
+        if (count() == 0)
             throw new IllegalStateException("Column is empty");
-        }
-
-        return min;
+        return cachedMin;
     }
 
     @Override
     public double max() {
-        int max = Integer.MIN_VALUE;
-        boolean found = false;
-
-        for (int i = 0; i < column.size(); i++) {
-            if (column.isNull(i)) continue;
-
-            max = Math.max(max, column.getInt(i));
-            found = true;
-        }
-
-        if (!found) {
+        computeAggregates();
+        if (count() == 0)
             throw new IllegalStateException("Column is empty");
-        }
-
-        return max;
-    }
-
-    @Override
-    public double avg() {
-        long sum = 0;
-        long count = 0;
-
-        for (int i = 0; i < column.size(); i++) {
-            if (column.isNull(i)) continue;
-
-            sum += column.getInt(i);
-            count++;
-        }
-
-        if (count == 0) {
-            throw new IllegalStateException("Column is empty");
-        }
-
-        return (double) sum / count;
+        return cachedMax;
     }
 
     @Override
     public double sum() {
-        long sum = 0;
+        computeAggregates();
+        return cachedSum;
+    }
 
-        for (int i = 0; i < column.size(); i++) {
-            if (!column.isNull(i)) {
-                sum += column.getInt(i);
-            }
-        }
-
-        return sum;
+    @Override
+    public double avg() {
+        computeAggregates();
+        long c = count();
+        if (c == 0)
+            throw new IllegalStateException("Column is empty");
+        return (double) cachedSum / c;
     }
 }
