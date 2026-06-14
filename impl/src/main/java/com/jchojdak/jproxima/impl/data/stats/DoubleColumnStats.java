@@ -16,13 +16,13 @@ public final class DoubleColumnStats extends BaseColumnStats {
     }
 
     @Override
-    protected boolean isNullAt(int i) {
-        return column.isNull(i);
+    protected boolean isNullAt(int index) {
+        return column.isNull(index);
     }
 
     @Override
-    protected double valueAt(int i) {
-        return column.getDouble(i);
+    protected double valueAt(int index) {
+        return column.getDouble(index);
     }
 
     @Override
