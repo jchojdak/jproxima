@@ -161,6 +161,35 @@ class DefaultDataFrame implements DataFrame {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof DataFrame other)) {
+            return false;
+        }
+
+        if (this.rowCount() != other.rowCount() || this.columnCount() != other.columnCount()) {
+            return false;
+        }
+
+        List<String> thisNames = this.getColumnNames();
+        List<String> otherNames = other.getColumnNames();
+
+        if (!thisNames.equals(otherNames)) {
+            return false;
+        }
+
+        for (String name : thisNames) {
+            if (!this.getColumn(name).equals(other.getColumn(name))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
     public String toString(int displayLimit) {
         if (columns.isEmpty()) {
             return "<Empty DataFrame>";
