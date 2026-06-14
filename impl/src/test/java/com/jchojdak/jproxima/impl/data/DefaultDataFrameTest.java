@@ -250,4 +250,34 @@ class DefaultDataFrameTest {
 
         assertEquals("<Empty DataFrame>", result);
     }
+
+    @Test
+    void shouldReturnCorrectDataFrameEquals() {
+        DataFrame df1 = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2, 3})
+                .addColumn("col2", new Object[]{"a", "b", "c"})
+                .build();
+
+        DataFrame df2 = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2, 3})
+                .addColumn("col2", new Object[]{"a", "b", "c"})
+                .build();
+
+        assertEquals(df1, df2);
+    }
+
+    @Test
+    void shouldReturnCorrectDataFrameHashCode() {
+        DataFrame df1 = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2, 3})
+                .addColumn("col2", new Object[]{"a", "b", "c"})
+                .build();
+
+        DataFrame df2 = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2, 3})
+                .addColumn("col2", new Object[]{"a", "b", "c"})
+                .build();
+
+        assertEquals(df1.hashCode(), df2.hashCode());
+    }
 }
