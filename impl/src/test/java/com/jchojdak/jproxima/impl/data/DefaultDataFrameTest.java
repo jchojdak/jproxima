@@ -267,6 +267,91 @@ class DefaultDataFrameTest {
     }
 
     @Test
+    void shouldReturnFalseWhenComparedToNull() {
+        DataFrame df = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2, 3})
+                .build();
+
+        assertNotEquals(null, df);
+    }
+
+    @Test
+    void shouldReturnFalseWhenRowCountsDiffer() {
+        DataFrame df1 = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2, 3})
+                .build();
+
+        DataFrame df2 = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2})
+                .build();
+
+        assertNotEquals(df1, df2);
+    }
+
+    @Test
+    void shouldReturnFalseWhenColumnCountsDiffer() {
+        DataFrame df1 = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2})
+                .addColumn("col2", new Object[]{"a", "b"})
+                .build();
+
+        DataFrame df2 = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2})
+                .build();
+
+        assertNotEquals(df1, df2);
+    }
+
+    @Test
+    void shouldReturnFalseWhenColumnNamesAreDifferent() {
+        DataFrame df1 = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2, 3})
+                .build();
+
+        DataFrame df2 = DataFrameBuilder.create()
+                .addColumn("col2", new Object[]{1, 2, 3})
+                .build();
+
+        assertNotEquals(df1, df2);
+    }
+
+    @Test
+    void shouldReturnFalseWhenColumnOrderIsDifferent() {
+        DataFrame df1 = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2})
+                .addColumn("col2", new Object[]{"a", "b"})
+                .build();
+
+        DataFrame df2 = DataFrameBuilder.create()
+                .addColumn("col2", new Object[]{"a", "b"})
+                .addColumn("col1", new Object[]{1, 2})
+                .build();
+
+        assertNotEquals(df1, df2);
+    }
+
+    @Test
+    void shouldReturnFalseWhenColumnValuesAreDifferent() {
+        DataFrame df1 = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2, 3})
+                .build();
+
+        DataFrame df2 = DataFrameBuilder.create()
+                .addColumn("col1", new Object[]{1, 2, 99})
+                .build();
+
+        assertNotEquals(df1, df2);
+    }
+
+    @Test
+    void shouldReturnTrueForTwoEmptyDataFrames() {
+        DataFrame df1 = DataFrameBuilder.create().build();
+        DataFrame df2 = DataFrameBuilder.create().build();
+
+        assertEquals(df1, df2);
+    }
+
+    @Test
     void shouldReturnCorrectDataFrameHashCode() {
         DataFrame df1 = DataFrameBuilder.create()
                 .addColumn("col1", new Object[]{1, 2, 3})
