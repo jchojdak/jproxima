@@ -190,6 +190,17 @@ class DefaultDataFrame implements DataFrame {
     }
 
     @Override
+    public int hashCode() {
+        int hash = Objects.hash(getColumnNames(), rowCount(), columnCount());
+
+        for (Column column : columns.values()) {
+            hash = 31 * hash + column.hashCode();
+        }
+
+        return hash;
+    }
+
+    @Override
     public String toString(int displayLimit) {
         if (columns.isEmpty()) {
             return "<Empty DataFrame>";
