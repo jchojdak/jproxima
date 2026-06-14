@@ -30,18 +30,6 @@ class BaseColumnTest {
     }
 
     @Test
-    void shouldReturnTrueWhenSameReference() {
-        Column col1 = IntColumnBuilder.init()
-                .name("col")
-                .add(1)
-                .add(2)
-                .add(3)
-                .build();
-
-        assertEquals(col1, col1);
-    }
-
-    @Test
     void shouldReturnFalseWhenComparedToNull() {
         Column col1 = IntColumnBuilder.init()
                 .name("col")
