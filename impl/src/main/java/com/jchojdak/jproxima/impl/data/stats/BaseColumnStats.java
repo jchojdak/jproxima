@@ -2,6 +2,11 @@ package com.jchojdak.jproxima.impl.data.stats;
 
 import com.jchojdak.jproxima.data.ColumnStats;
 
+/**
+ * Base implementation of ColumnStats providing lazy evaluation and caching.
+ * Computes counts and basic aggregates (min, max, sum) on-demand and caches
+ * results for subsequent calls. Thread-safe via internal synchronization.
+ */
 abstract class BaseColumnStats implements ColumnStats {
 
     private boolean countsComputed = false;

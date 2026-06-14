@@ -2,6 +2,10 @@ package com.jchojdak.jproxima.impl.data.stats;
 
 import com.jchojdak.jproxima.data.IntColumn;
 
+/**
+ * Concrete implementation of BaseColumnStats for integer-based columns.
+ * Adapts IntColumn data access.
+ */
 public final class IntColumnStats extends BaseColumnStats {
 
     private final IntColumn column;

@@ -2,6 +2,10 @@ package com.jchojdak.jproxima.impl.data.stats;
 
 import com.jchojdak.jproxima.data.DoubleColumn;
 
+/**
+ * Concrete implementation of BaseColumnStats for double-based columns.
+ * Adapts DoubleColumn data access.
+ */
 public final class DoubleColumnStats extends BaseColumnStats {
 
     private final DoubleColumn column;
