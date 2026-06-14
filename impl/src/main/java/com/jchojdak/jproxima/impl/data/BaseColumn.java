@@ -4,6 +4,7 @@ import com.jchojdak.jproxima.data.Column;
 import com.jchojdak.jproxima.data.DataType;
 
 import java.util.BitSet;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -25,6 +26,8 @@ abstract sealed class BaseColumn implements Column
     protected final DataType type;
     protected final int size;
     protected final BitSet nullMask;
+
+    private int cachedHashCode;
 
     protected BaseColumn(String name, DataType type, int size) {
         this.name = name;
@@ -51,6 +54,52 @@ abstract sealed class BaseColumn implements Column
     @Override
     public final String toString() {
         return toString(DEFAULT_DISPLAY_LIMIT);
+    }
+
+    @Override
+    public final boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Column other)) {
+            return false;
+        }
+
+        if (this.size != other.size() ||
+                this.type != other.getType() ||
+                !this.name.equals(other.getName())) {
+            return false;
+        }
+
+        for (int i = 0; i < size; i++) {
+            boolean thisNull = this.isNull(i);
+            boolean thatNull = other.isNull(i);
+
+            if (thisNull != thatNull) return false;
+            if (thisNull) continue;
+
+            if (!Objects.equals(this.get(i), other.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public final int hashCode() {
+        int hash = cachedHashCode;
+        if (hash == 0 && size > 0) {
+            hash = Objects.hash(name, type.name(), size);
+
+            for (int i = 0; i < size; i++) {
+                Object val = this.get(i);
+                hash = 31 * hash + (val == null ? 0 : val.hashCode());
+            }
+
+            cachedHashCode = hash;
+        }
+        return hash;
     }
 
     @Override
