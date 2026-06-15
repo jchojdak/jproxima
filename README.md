@@ -61,39 +61,56 @@ import com.jchojdak.jproxima.io.DataFrameReader;
 public class Example {
     public static void main(String[] args) {
 
-        // 1. Read CSV file
-        DataFrame df = DataFrameReader.csv("data.csv")
+        // 1. Read CSV files
+        DataFrame customers = DataFrameReader.csv("customers.csv")
                 .delimiter(',')
                 .header(true)
                 .build();
 
-        // 2. Select and manipulate data
-        DataFrame selected = df.getColumns("name", "age");
-        DataFrame withoutAge = df.dropColumn("age");
+        DataFrame orders = DataFrameReader.excel("orders.xlsx")
+                .sheet("orders1")
+                .header(true)
+                .build();
 
-        // 3. Preview data
-        System.out.println(selected.head(2)); // first 2 rows
-        System.out.println(selected.tail(2)); // last 2 rows
+        // 2. Join DataFrames
+        DataFrame joined = customers.join(
+                orders,
+                JoinType.INNER,
+                "customer_id",
+                "customer_id",
+                "_x",
+                "_y"
+        );
 
-        System.out.println(withoutAge.head(2)); // first 2 rows
+        // 3. Select and manipulate data
+        DataFrame selected = joined.getColumns("customer_id", "name", "amount");
+        DataFrame withoutId = selected.dropColumn("customer_id");
 
-        // 4. Access values
-        String firstName = df
-                .getColumn("name")
-                .get(0)
-                .toString();
+        // 4. Preview data
+        System.out.println(selected.head(5)); // first 5 rows
+        System.out.println(selected.tail(5)); // last 5 rows
 
-        int size = df
-                .getColumn("name")
-                .size();
+        // 5. Column statistics
+        var stats = joined.getColumn("amount").stats();
 
-        // 5. Print values
+        System.out.println("Min: " + stats.min());
+        System.out.println("Max: " + stats.max());
+        System.out.println("Avg: " + stats.avg());
+        System.out.println("Sum: " + stats.sum());
+        System.out.println("Count: " + stats.count());
+        System.out.println("Nulls: " + stats.nullCount());
+
+        // 6. Access values
+        String firstName = joined.getColumn("name").get(0).toString();
+        int size = joined.getColumn("name").size();
+
+        // 7. Print values
         System.out.println("First name: " + firstName);
         System.out.println("Column size: " + size);
 
-        // 6. Save results
+        // 8. Save results
         selected.toCsv("output.csv");
-        selected.toXlsx("output.xlsx");
+        selected.toExcel("output.xlsx");
     }
 }
 ```
