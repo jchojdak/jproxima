@@ -31,23 +31,45 @@ without changing end-user code.
 
 Include the JProxima library in your project using your preferred dependency management system (Maven/Gradle).
 
+> Replace `0.4.0` with the latest version available on releases.
+
 For example, using Maven:
 
 ```xml
-
 <dependencies>
+    <!-- use the latest version -->
     <dependency>
         <groupId>com.jchojdak</groupId>
         <artifactId>jproxima-api</artifactId>
-        <version>0.4.0</version><!-- use the latest version -->
+        <version>0.4.0</version>
     </dependency>
     <dependency>
         <groupId>com.jchojdak</groupId>
         <artifactId>jproxima-impl</artifactId>
-        <version>0.4.0</version><!-- use the latest version -->
+        <version>0.4.0</version>
         <scope>runtime</scope>
     </dependency>
 </dependencies>
+```
+
+Using Gradle (Groovy DSL):
+
+```groovy
+dependencies {
+    // use the latest version
+    implementation "com.jchojdak:jproxima-api:0.4.0"
+    runtimeOnly "com.jchojdak:jproxima-impl:0.4.0"
+}
+```
+
+Using Gradle (Kotlin DSL):
+
+```kotlin
+dependencies {
+    // use the latest version
+    implementation("com.jchojdak:jproxima-api:0.4.0")
+    runtimeOnly("com.jchojdak:jproxima-impl:0.4.0")
+}
 ```
 
 ## Examples
