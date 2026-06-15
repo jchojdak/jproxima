@@ -1,11 +1,16 @@
 package com.jchojdak.jproxima.impl.data;
 
 import com.jchojdak.jproxima.data.*;
+import com.jchojdak.jproxima.data.JoinType;
+import com.jchojdak.jproxima.impl.data.join.DataFrameJoiner;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.times;
 
 class DefaultDataFrameTest {
 
@@ -364,5 +369,61 @@ class DefaultDataFrameTest {
                 .build();
 
         assertEquals(df1.hashCode(), df2.hashCode());
+    }
+
+    @Test
+    void shouldDelegateJoinToDataFrameJoiner() {
+        DataFrame left = DataFrameBuilder.create()
+                .addColumn("id", new Object[]{1, 2, 3})
+                .addColumn("name", new Object[]{"Alice", "Bob", "Charlie"})
+                .build();
+
+        DataFrame right = DataFrameBuilder.create()
+                .addColumn("id", new Object[]{2, 3, 4})
+                .addColumn("city", new Object[]{"Warsaw", "Krakow", "Pulawy"})
+                .build();
+
+        DataFrame mockResult = DataFrameBuilder.create()
+                .addColumn("id", new Object[]{2, 3})
+                .build();
+
+        List<String> leftKeys = List.of("id");
+        List<String> rightKeys = List.of("id");
+        String leftSuffix = "_left";
+        String rightSuffix = "_right";
+
+        try (MockedStatic<DataFrameJoiner> mocked = mockStatic(DataFrameJoiner.class)) {
+            mocked.when(() -> DataFrameJoiner.join(
+                            left,
+                            right,
+                            JoinType.INNER,
+                            leftKeys,
+                            rightKeys,
+                            leftSuffix,
+                            rightSuffix
+                    ))
+                    .thenReturn(mockResult);
+
+            DataFrame result = left.join(
+                    right,
+                    JoinType.INNER,
+                    leftKeys,
+                    rightKeys,
+                    leftSuffix,
+                    rightSuffix
+            );
+
+            assertEquals(mockResult, result);
+
+            mocked.verify(() -> DataFrameJoiner.join(
+                    left,
+                    right,
+                    JoinType.INNER,
+                    leftKeys,
+                    rightKeys,
+                    leftSuffix,
+                    rightSuffix
+            ), times(1));
+        }
     }
 }

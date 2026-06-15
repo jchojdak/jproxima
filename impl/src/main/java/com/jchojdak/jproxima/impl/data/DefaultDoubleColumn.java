@@ -1,10 +1,13 @@
 package com.jchojdak.jproxima.impl.data;
 
+import com.jchojdak.jproxima.data.ColumnStats;
 import com.jchojdak.jproxima.data.DataType;
 import com.jchojdak.jproxima.data.DoubleColumn;
+import com.jchojdak.jproxima.impl.data.stats.DoubleColumnStats;
 
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Default implementation of {@link DoubleColumn}.
@@ -14,6 +17,7 @@ final class DefaultDoubleColumn extends BaseColumn implements DoubleColumn {
     private static final double DEFAULT_NULL_VALUE = 0.0;
 
     private final double[] data;
+    private final AtomicReference<ColumnStats> stats = new AtomicReference<>();
 
     DefaultDoubleColumn(String name, double[] data, BitSet nullMask) {
         super(name, DataType.DOUBLE, data.length);
@@ -67,5 +71,18 @@ final class DefaultDoubleColumn extends BaseColumn implements DoubleColumn {
     @Override
     protected String valueToString(int index) {
         return isNull(index) ? "null" : String.valueOf(data[index]);
+    }
+
+    @Override
+    public ColumnStats stats() {
+        ColumnStats s = stats.get();
+
+        if (s == null) {
+            ColumnStats computed = new DoubleColumnStats(this);
+            stats.compareAndSet(null, computed);
+            s = stats.get();
+        }
+
+        return s;
     }
 }

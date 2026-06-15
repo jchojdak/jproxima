@@ -2,6 +2,8 @@ package com.jchojdak.jproxima.impl.data;
 
 import com.jchojdak.jproxima.data.Column;
 import com.jchojdak.jproxima.data.DataFrame;
+import com.jchojdak.jproxima.data.JoinType;
+import com.jchojdak.jproxima.impl.data.join.DataFrameJoiner;
 import com.jchojdak.jproxima.impl.io.csv.CsvWriter;
 import com.jchojdak.jproxima.impl.io.excel.ExcelWriter;
 
@@ -247,6 +249,26 @@ class DefaultDataFrame implements DataFrame {
     @Override
     public void toExcel(String path) {
         toXlsx(path);
+    }
+
+    @Override
+    public DataFrame join(
+            DataFrame other,
+            JoinType type,
+            List<String> leftKeys,
+            List<String> rightKeys,
+            String leftSuffix,
+            String rightSuffix
+    ) {
+        return DataFrameJoiner.join(
+                this,
+                other,
+                type,
+                leftKeys,
+                rightKeys,
+                leftSuffix,
+                rightSuffix
+        );
     }
 
     private int[] calculateColumnWidths(String[] columnNames, int rowsToShow) {
