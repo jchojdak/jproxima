@@ -123,4 +123,121 @@ public interface DataFrame {
      * @param path path to the output file
      */
     void toExcel(String path);
+
+    /**
+     * Performs a join between this DataFrame (left) and another DataFrame (right).
+     *
+     * <p>This is the most general join method. All other overloads delegate to this one.</p>
+     *
+     * @param other       right DataFrame
+     * @param type        join type
+     * @param leftKeys    join keys from left DataFrame
+     * @param rightKeys   join keys from right DataFrame
+     * @param leftSuffix  suffix for conflicting left columns
+     * @param rightSuffix suffix for conflicting right columns
+     * @return new joined DataFrame
+     */
+    DataFrame join(
+            DataFrame other,
+            JoinType type,
+            List<String> leftKeys,
+            List<String> rightKeys,
+            String leftSuffix,
+            String rightSuffix
+    );
+
+    /**
+     * Join using single key columns with custom suffixes.
+     */
+    default DataFrame join(
+            DataFrame other,
+            JoinType type,
+            String leftKey,
+            String rightKey,
+            String leftSuffix,
+            String rightSuffix
+    ) {
+        return join(
+                other,
+                type,
+                List.of(leftKey),
+                List.of(rightKey),
+                leftSuffix,
+                rightSuffix
+        );
+    }
+
+    /**
+     * Join using a single key column with default suffixes ({@code _x}, {@code _y}).
+     */
+    default DataFrame join(
+            DataFrame other,
+            JoinType type,
+            String leftKey,
+            String rightKey
+    ) {
+        return join(
+                other,
+                type,
+                List.of(leftKey),
+                List.of(rightKey),
+                "_x",
+                "_y"
+        );
+    }
+
+    /**
+     * Join using multiple key columns with default suffixes.
+     */
+    default DataFrame join(
+            DataFrame other,
+            JoinType type,
+            List<String> leftKeys,
+            List<String> rightKeys
+    ) {
+        return join(
+                other,
+                type,
+                leftKeys,
+                rightKeys,
+                "_x",
+                "_y"
+        );
+    }
+
+    /**
+     * Join using the same column name on both sides.
+     */
+    default DataFrame join(
+            DataFrame other,
+            JoinType type,
+            String key
+    ) {
+        return join(
+                other,
+                type,
+                List.of(key),
+                List.of(key),
+                "_x",
+                "_y"
+        );
+    }
+
+    /**
+     * Join using multiple identical column names on both sides.
+     */
+    default DataFrame join(
+            DataFrame other,
+            JoinType type,
+            List<String> keys
+    ) {
+        return join(
+                other,
+                type,
+                keys,
+                keys,
+                "_x",
+                "_y"
+        );
+    }
 }

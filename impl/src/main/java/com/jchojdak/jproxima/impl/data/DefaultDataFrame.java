@@ -2,6 +2,8 @@ package com.jchojdak.jproxima.impl.data;
 
 import com.jchojdak.jproxima.data.Column;
 import com.jchojdak.jproxima.data.DataFrame;
+import com.jchojdak.jproxima.data.JoinType;
+import com.jchojdak.jproxima.impl.data.join.DataFrameJoiner;
 import com.jchojdak.jproxima.impl.io.csv.CsvWriter;
 import com.jchojdak.jproxima.impl.io.excel.ExcelWriter;
 
@@ -161,6 +163,46 @@ class DefaultDataFrame implements DataFrame {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof DataFrame other)) {
+            return false;
+        }
+
+        if (this.rowCount() != other.rowCount() || this.columnCount() != other.columnCount()) {
+            return false;
+        }
+
+        List<String> thisNames = this.getColumnNames();
+        List<String> otherNames = other.getColumnNames();
+
+        if (!thisNames.equals(otherNames)) {
+            return false;
+        }
+
+        for (String name : thisNames) {
+            if (!this.getColumn(name).equals(other.getColumn(name))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = Objects.hash(getColumnNames(), rowCount(), columnCount());
+
+        for (Column column : columns.values()) {
+            hash = 31 * hash + column.hashCode();
+        }
+
+        return hash;
+    }
+
+    @Override
     public String toString(int displayLimit) {
         if (columns.isEmpty()) {
             return "<Empty DataFrame>";
@@ -207,6 +249,26 @@ class DefaultDataFrame implements DataFrame {
     @Override
     public void toExcel(String path) {
         toXlsx(path);
+    }
+
+    @Override
+    public DataFrame join(
+            DataFrame other,
+            JoinType type,
+            List<String> leftKeys,
+            List<String> rightKeys,
+            String leftSuffix,
+            String rightSuffix
+    ) {
+        return DataFrameJoiner.join(
+                this,
+                other,
+                type,
+                leftKeys,
+                rightKeys,
+                leftSuffix,
+                rightSuffix
+        );
     }
 
     private int[] calculateColumnWidths(String[] columnNames, int rowsToShow) {
