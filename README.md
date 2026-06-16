@@ -26,6 +26,8 @@ without changing end-user code.
 - **File I/O**: Read and write CSV (.csv) and Excel (.xlsx) files
 - **Fluent API**: Intuitive data manipulation
 - **Type-safe**: Automatic type inference and strong type safety via DataType
+- **DataFrame operations**: Join (INNER, LEFT, RIGHT, FULL), drop column
+- **Column operations**: Statistics (min, max, avg, sum, count, nullCount)
 
 ## Installation
 
