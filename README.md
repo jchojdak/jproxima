@@ -117,12 +117,21 @@ public class Example {
         // 5. Column statistics
         var stats = joined.getColumn("amount").stats();
 
-        System.out.println("Min: " + stats.min());
-        System.out.println("Max: " + stats.max());
-        System.out.println("Avg: " + stats.avg());
-        System.out.println("Sum: " + stats.sum());
-        System.out.println("Count: " + stats.count());
-        System.out.println("Nulls: " + stats.nullCount());
+        System.out.printf("""
+                        Min: %s
+                        Max: %s
+                        Avg: %s
+                        Sum: %s
+                        Count: %d
+                        Nulls: %d
+                        """,
+                stats.min(),
+                stats.max(),
+                stats.avg(),
+                stats.sum(),
+                stats.count(),
+                stats.nullCount()
+        );
 
         // 6. Access values
         String firstName = joined.getColumn("name").get(0).toString();
