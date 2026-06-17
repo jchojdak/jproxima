@@ -75,11 +75,11 @@ final class DefaultDoubleColumn extends BaseColumn implements DoubleColumn {
     }
 
     @Override
-    protected Column copyWithName(String newName) {
+    protected Column withName(String newName) {
         return new DefaultDoubleColumn(
                 newName,
-                Arrays.copyOf(data, data.length),
-                (BitSet) nullMask.clone()
+                data,
+                nullMask
         );
     }
 

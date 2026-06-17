@@ -75,11 +75,11 @@ final class DefaultIntColumn extends BaseColumn implements IntColumn {
     }
 
     @Override
-    protected Column copyWithName(String newName) {
+    protected Column withName(String newName) {
         return new DefaultIntColumn(
                 newName,
-                Arrays.copyOf(data, data.length),
-                (BitSet) nullMask.clone()
+                data,
+                nullMask
         );
     }
 

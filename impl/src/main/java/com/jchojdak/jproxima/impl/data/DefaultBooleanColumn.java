@@ -71,11 +71,11 @@ final class DefaultBooleanColumn extends BaseColumn implements BooleanColumn {
     }
 
     @Override
-    protected Column copyWithName(String newName) {
+    protected Column withName(String newName) {
         return new DefaultBooleanColumn(
                 newName,
-                Arrays.copyOf(data, data.length),
-                (BitSet) nullMask.clone()
+                data,
+                nullMask
         );
     }
 }

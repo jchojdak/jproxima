@@ -5,6 +5,7 @@ import com.jchojdak.jproxima.data.DataType;
 import com.jchojdak.jproxima.data.StringColumn;
 
 import java.util.Arrays;
+import java.util.BitSet;
 
 /**
  * Default implementation of {@link StringColumn}.
@@ -27,6 +28,13 @@ final class DefaultStringColumn extends BaseColumn implements StringColumn {
                 this.data[i] = data[i].toString();
             }
         }
+    }
+
+    private DefaultStringColumn(String name, String[] data, BitSet nullMask) {
+        super(name, DataType.STRING, data.length);
+
+        this.data = data;
+        this.nullMask.or(nullMask);
     }
 
     @Override
@@ -55,10 +63,11 @@ final class DefaultStringColumn extends BaseColumn implements StringColumn {
     }
 
     @Override
-    protected Column copyWithName(String newName) {
+    protected Column withName(String newName) {
         return new DefaultStringColumn(
                 newName,
-                Arrays.copyOf(data, data.length)
+                data,
+                nullMask
         );
     }
 }

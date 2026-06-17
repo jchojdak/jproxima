@@ -57,7 +57,7 @@ abstract sealed class BaseColumn implements Column
             return this;
         }
 
-        return copyWithName(newName);
+        return withName(newName);
     }
 
     @Override
@@ -136,5 +136,5 @@ abstract sealed class BaseColumn implements Column
 
     protected abstract String valueToString(int index);
 
-    protected abstract Column copyWithName(String newName);
+    protected abstract Column withName(String newName);
 }
