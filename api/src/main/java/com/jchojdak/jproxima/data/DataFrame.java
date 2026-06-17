@@ -25,6 +25,15 @@ public interface DataFrame {
     int columnCount();
 
     /**
+     * Returns a new DataFrame instance with a column renamed.
+     *
+     * @param oldName old column name
+     * @param newName new column name
+     * @return new DataFrame instance with the column renamed
+     */
+    DataFrame renameColumn(String oldName, String newName);
+
+    /**
      * Returns a column by name.
      *
      * @param name column name

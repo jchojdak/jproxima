@@ -38,6 +38,32 @@ class DefaultDataFrame implements DataFrame {
     }
 
     @Override
+    public DataFrame renameColumn(String oldName, String newName) {
+        if (!columns.containsKey(oldName)) {
+            throw new IllegalArgumentException("Column with name " + oldName + " does not exist.");
+        }
+
+        if (columns.containsKey(newName) && !oldName.equals(newName)) {
+            throw new IllegalArgumentException("Column with name '" + newName + "' already exists.");
+        }
+
+        Map<String, Column> updatedColumns = new LinkedHashMap<>();
+
+        for (Map.Entry<String, Column> entry : columns.entrySet()) {
+            String columnName = entry.getKey();
+            Column column = entry.getValue();
+
+            if (columnName.equals(oldName)) {
+                updatedColumns.put(newName, column.rename(newName));
+            } else {
+                updatedColumns.put(columnName, column);
+            }
+        }
+
+        return new DefaultDataFrame(updatedColumns);
+    }
+
+    @Override
     public Column getColumn(String name) {
         return columns.get(name);
     }

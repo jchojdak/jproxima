@@ -52,6 +52,15 @@ abstract sealed class BaseColumn implements Column
     }
 
     @Override
+    public final Column rename(String newName) {
+        if (name.equals(newName)) {
+            return this;
+        }
+
+        return copyWithName(newName);
+    }
+
+    @Override
     public final String toString() {
         return toString(DEFAULT_DISPLAY_LIMIT);
     }
@@ -126,4 +135,6 @@ abstract sealed class BaseColumn implements Column
     }
 
     protected abstract String valueToString(int index);
+
+    protected abstract Column copyWithName(String newName);
 }

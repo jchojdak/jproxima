@@ -1,5 +1,6 @@
 package com.jchojdak.jproxima.impl.data;
 
+import com.jchojdak.jproxima.data.Column;
 import com.jchojdak.jproxima.data.DataType;
 import com.jchojdak.jproxima.data.StringColumn;
 
@@ -51,5 +52,13 @@ final class DefaultStringColumn extends BaseColumn implements StringColumn {
     @Override
     protected String valueToString(int index) {
         return isNull(index) ? "null" : data[index];
+    }
+
+    @Override
+    protected Column copyWithName(String newName) {
+        return new DefaultStringColumn(
+                newName,
+                Arrays.copyOf(data, data.length)
+        );
     }
 }

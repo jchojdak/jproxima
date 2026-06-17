@@ -1,6 +1,7 @@
 package com.jchojdak.jproxima.impl.data;
 
 import com.jchojdak.jproxima.data.BooleanColumn;
+import com.jchojdak.jproxima.data.Column;
 import com.jchojdak.jproxima.data.DataType;
 
 import java.util.Arrays;
@@ -67,5 +68,14 @@ final class DefaultBooleanColumn extends BaseColumn implements BooleanColumn {
     @Override
     protected String valueToString(int index) {
         return isNull(index) ? "null" : String.valueOf(data[index]);
+    }
+
+    @Override
+    protected Column copyWithName(String newName) {
+        return new DefaultBooleanColumn(
+                newName,
+                Arrays.copyOf(data, data.length),
+                (BitSet) nullMask.clone()
+        );
     }
 }

@@ -55,6 +55,14 @@ public interface Column {
     String getName();
 
     /**
+     * Returns a new column with name changed to {@code newName}.
+     *
+     * @param newName new column name
+     * @return new instance of column
+     */
+    Column rename(String newName);
+
+    /**
      * Returns a string representation of the column, with up to {@code displayLimit} values shown.
      *
      * @param displayLimit max number of elements to show

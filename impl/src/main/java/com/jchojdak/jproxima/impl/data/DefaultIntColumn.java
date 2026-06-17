@@ -1,5 +1,6 @@
 package com.jchojdak.jproxima.impl.data;
 
+import com.jchojdak.jproxima.data.Column;
 import com.jchojdak.jproxima.data.ColumnStats;
 import com.jchojdak.jproxima.data.DataType;
 import com.jchojdak.jproxima.data.IntColumn;
@@ -71,6 +72,15 @@ final class DefaultIntColumn extends BaseColumn implements IntColumn {
     @Override
     protected String valueToString(int index) {
         return isNull(index) ? "null" : String.valueOf(data[index]);
+    }
+
+    @Override
+    protected Column copyWithName(String newName) {
+        return new DefaultIntColumn(
+                newName,
+                Arrays.copyOf(data, data.length),
+                (BitSet) nullMask.clone()
+        );
     }
 
     @Override
