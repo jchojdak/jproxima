@@ -8,6 +8,7 @@ on:
       - release/**
       - fix/**
       - refactor/**
+      - test/**
 
   pull_request:
     branches:
@@ -15,10 +16,17 @@ on:
       - feature/**
       - release/**
 
+permissions:
+  contents: read
+
+concurrency:
+  group: sonar-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build:
-    name: Build and analyze
+  sonar:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - uses: actions/checkout@v4
@@ -41,4 +49,4 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        run: ./mvnw -B -ntp clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
