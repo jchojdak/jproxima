@@ -72,6 +72,8 @@ jobs:
 
       - name: Wait for Sonar Quality Gate
         uses: sonarsource/sonarqube-quality-gate-action@cf038b0e0cdecfa9e56c198bbb7d21d751d62c3b
+        with:
+          scanMetadataReportFile: target/sonar/report-task.txt
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
