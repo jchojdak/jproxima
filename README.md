@@ -3,6 +3,15 @@
 > [!WARNING]
 > This library is compiled with Java 21. Running it on older JVMs is not supported.
 
+```
+ _______ ______                _
+(_______|_____ \              (_)
+     _   _____) )___ ___ _   _ _ ____  _____
+ _  | | |  ____/ ___) _ ( \ / ) |    \(____ |
+| |_| | | |   | |  | |_| ) X (| | | | / ___ |
+ \___/  |_|   |_|   \___(_/ \_)_|_|_|_\_____|
+```
+
 [![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=jchojdak_jproxima)
 
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=jchojdak_jproxima&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=jchojdak_jproxima)
